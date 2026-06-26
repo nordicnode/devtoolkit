@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Developer Cheat Sheets — Quick Reference Guides | DevToolKit</title>
+  <meta name="description" content="Free developer cheat sheets and quick reference guides. Regex, Git, JSON, HTTP status codes, CSS, JavaScript, Python, and more printable reference cards.">
+  <meta name="keywords" content="developer cheat sheet, regex cheat sheet, git cheat sheet, JSON reference, HTTP status codes, CSS reference, JavaScript cheat sheet, Python cheat sheet">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/pages/cheatsheets.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="Developer Cheat Sheets — DevToolKit">
+  <meta property="og:description" content="Quick reference cheat sheets for developers. Regex, Git, HTTP, CSS, and more.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"CollectionPage","name":"Developer Cheat Sheets","url":"https://nordicnode.github.io/devtoolkit/pages/cheatsheets.html","description":"Quick reference cheat sheets for common developer topics."}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="cheatsheets.html" class="active">Cheat Sheets</a><a href="about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>Developer Cheat Sheets</h1><p>Quick reference guides for common development topics. Bookmark these for daily use.</p></div>
+
+  <div class="ad-container" id="ad-cs-top"></div>
+
+  <!-- REGEX CHEAT SHEET -->
+  <h2 class="section-title">Regular Expressions</h2>
+  <div class="info-section">
+    <h2>Regex Metacharacters & Syntax</h2>
+    <table class="cheat-table">
+      <tr><th>Pattern</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td>.</td><td>Any character (except newline)</td><td>a.c → abc, a1c</td></tr>
+      <tr><td>\d</td><td>Digit [0-9]</td><td>\d+ → 123</td></tr>
+      <tr><td>\w</td><td>Word character [a-zA-Z0-9_]</td><td>\w+ → hello_world</td></tr>
+      <tr><td>\s</td><td>Whitespace</td><td>a\sb → a b</td></tr>
+      <tr><td>\D</td><td>Non-digit</td><td>\D+ → abc</td></tr>
+      <tr><td>\W</td><td>Non-word character</td><td>\W → !</td></tr>
+      <tr><td>\S</td><td>Non-whitespace</td><td>\S+ → hello</td></tr>
+      <tr><td>^</td><td>Start of string/line</td><td>^Hello</td></tr>
+      <tr><td>$</td><td>End of string/line</td><td>world$</td></tr>
+      <tr><td>*</td><td>Zero or more</td><td>ab*c → ac, abc, abbc</td></tr>
+      <tr><td>+</td><td>One or more</td><td>ab+c → abc, abbc</td></tr>
+      <tr><td>?</td><td>Zero or one</td><td>colou?r → color, colour</td></tr>
+      <tr><td>{n}</td><td>Exactly n times</td><td>\d{4} → 2026</td></tr>
+      <tr><td>{n,m}</td><td>Between n and m times</td><td>\d{2,4} → 12, 123, 1234</td></tr>
+      <tr><td>[abc]</td><td>Character class</td><td>[aeiou] → matches a vowel</td></tr>
+      <tr><td>[^abc]</td><td>Negated class</td><td>[^0-9] → non-digits</td></tr>
+      <tr><td>(a|b)</td><td>Alternation (OR)</td><td>(cat|dog) → cat or dog</td></tr>
+      <tr><td>()</td><td>Capturing group</td><td>(\w+)@\1 → repeat capture</td></tr>
+      <tr><td>(?:)</td><td>Non-capturing group</td><td>(?:abc)+ → abcabc</td></tr>
+      <tr><td>(?=)</td><td>Positive lookahead</td><td>\d(?=px) → 3 in "3px"</td></tr>
+      <tr><td>(?!)</td><td>Negative lookahead</td><td>\d(?!px) → 3 in "3em"</td></tr>
+    </table>
+  </div>
+
+  <div class="ad-container" id="ad-cs-mid1"></div>
+
+  <!-- GIT CHEAT SHEET -->
+  <h2 class="section-title">Git Commands</h2>
+  <div class="info-section">
+    <h2>Essential Git Commands</h2>
+    <table class="cheat-table">
+      <tr><th>Command</th><th>Description</th></tr>
+      <tr><td>git init</td><td>Initialize a new repository</td></tr>
+      <tr><td>git clone <url></td><td>Clone a remote repository</td></tr>
+      <tr><td>git status</td><td>Show working tree status</td></tr>
+      <tr><td>git add .</td><td>Stage all changes</td></tr>
+      <tr><td>git add -p</td><td>Stage changes interactively</td></tr>
+      <tr><td>git commit -m "msg"</td><td>Commit staged changes</td></tr>
+      <tr><td>git commit --amend</td><td>Amend the last commit</td></tr>
+      <tr><td>git log --oneline</td><td>Compact commit history</td></tr>
+      <tr><td>git diff</td><td>Show unstaged changes</td></tr>
+      <tr><td>git diff --staged</td><td>Show staged changes</td></tr>
+      <tr><td>git branch <name></td><td>Create a new branch</td></tr>
+      <tr><td>git checkout -b <name></td><td>Create and switch to branch</td></tr>
+      <tr><td>git merge <branch></td><td>Merge branch into current</td></tr>
+      <tr><td>git rebase <branch></td><td>Rebase onto another branch</td></tr>
+      <tr><td>git push origin <branch></td><td>Push to remote</td></tr>
+      <tr><td>git pull --rebase</td><td>Fetch and rebase (cleaner)</td></tr>
+      <tr><td>git stash</td><td>Temporarily shelve changes</td></tr>
+      <tr><td>git stash pop</td><td>Restore shelved changes</td></tr>
+      <tr><td>git reset --soft HEAD~1</td><td>Undo last commit (keep changes staged)</td></tr>
+      <tr><td>git reset --hard HEAD~1</td><td>Undo last commit (discard changes)</td></tr>
+      <tr><td>git cherry-pick <sha></td><td>Apply a specific commit</td></tr>
+      <tr><td>git reflog</td><td>Show all HEAD movements (recovery)</td></tr>
+    </table>
+  </div>
+
+  <!-- HTTP STATUS CODES -->
+  <h2 class="section-title">HTTP Status Codes</h2>
+  <div class="info-section">
+    <h2>HTTP Response Code Reference</h2>
+    <table class="cheat-table">
+      <tr><th>Code</th><th>Meaning</th><th>Common Use</th></tr>
+      <tr><td>200</td><td>OK</td><td>Successful GET, PUT, DELETE</td></tr>
+      <tr><td>201</td><td>Created</td><td>Successful POST</td></tr>
+      <tr><td>204</td><td>No Content</td><td>Successful DELETE with no body</td></tr>
+      <tr><td>301</td><td>Moved Permanently</td><td>Permanent redirect</td></tr>
+      <tr><td>302</td><td>Found</td><td>Temporary redirect</td></tr>
+      <tr><td>304</td><td>Not Modified</td><td>Cache hit (conditional request)</td></tr>
+      <tr><td>400</td><td>Bad Request</td><td>Malformed syntax / validation error</td></tr>
+      <tr><td>401</td><td>Unauthorized</td><td>Missing or invalid auth</td></tr>
+      <tr><td>403</td><td>Forbidden</td><td>Auth valid but no permission</td></tr>
+      <tr><td>404</td><td>Not Found</td><td>Resource doesn't exist</td></tr>
+      <tr><td>409</td><td>Conflict</td><td>Duplicate / version conflict</td></tr>
+      <tr><td>422</td><td>Unprocessable Entity</td><td>Valid syntax, semantic errors</td></tr>
+      <tr><td>429</td><td>Too Many Requests</td><td>Rate limit exceeded</td></tr>
+      <tr><td>500</td><td>Internal Server Error</td><td>Uncaught server exception</td></tr>
+      <tr><td>502</td><td>Bad Gateway</td><td>Upstream server error</td></tr>
+      <tr><td>503</td><td>Service Unavailable</td><td>Server overloaded / maintenance</td></tr>
+    </table>
+  </div>
+
+  <div class="ad-container" id="ad-cs-mid2"></div>
+
+  <!-- PYTHON CHEAT SHEET -->
+  <h2 class="section-title">Python Quick Reference</h2>
+  <div class="info-section">
+    <h2>Python Common Operations</h2>
+    <table class="cheat-table">
+      <tr><th>Code</th><th>Description</th></tr>
+      <tr><td>f"{name=}"</td><td>Debug f-string (shows name=value)</td></tr>
+      <tr><td>if __name__ == "__main__"</td><td>Script entry point guard</td></tr>
+      <tr><td>dict.get(k, default)</td><td>Safe key access with fallback</td></tr>
+      <tr><td>list[::-1]</td><td>Reverse a list/string</td></tr>
+      <tr><td>enumerate(iterable)</td><td>Get index + value pairs</td></tr>
+      <tr><td>zip(a, b)</td><td>Iterate two sequences in parallel</td></tr>
+      <tr><td>{k: v for k, v in items}</td><td>Dict comprehension</td></tr>
+      <tr><td>any() / all()</td><td>Short-circuit boolean checks</td></tr>
+      <tr><td>collections.Counter</td><td>Count occurrences</td></tr>
+      <tr><td>itertools.product</td><td>Cartesian product</td></tr>
+      <tr><td>dataclass</td><td>Auto-generate __init__, __repr__, __eq__</td></tr>
+      <tr><td>pathlib.Path</td><td>Modern path handling (replaces os.path)</td></tr>
+      <tr><td>try/except/else/finally</td><td>Complete exception handling</td></tr>
+      <tr><td>with open(f) as fh</td><td>Context manager for file handling</td></tr>
+      <tr><td>from __future__ import annotations</td><td>Delayed annotation eval (3.9+)</td></tr>
+    </table>
+  </div>
+
+  <!-- JAVASCRIPT CHEAT SHEET -->
+  <h2 class="section-title">JavaScript Quick Reference</h2>
+  <div class="info-section">
+    <h2>Modern JavaScript (ES2020+)</h2>
+    <table class="cheat-table">
+      <tr><th>Code</th><th>Description</th></tr>
+      <tr><td>const / let</td><td>Block-scoped declarations (never use var)</td></tr>
+      <tr><td>?. (optional chaining)</td><td>obj?.prop — safe nested access</td></tr>
+      <tr><td>?? (nullish coalescing)</td><td>value ?? fallback — null/undefined only</td></tr>
+      <tr><td>`string ${expr}`</td><td>Template literals</td></tr>
+      <tr><td>[...arr]</td><td>Spread / shallow copy</td></tr>
+      <tr><td>{...obj}</td><td>Object spread / merge</td></tr>
+      <tr><td>.map() / .filter() / .reduce()</td><td>Array transformations</td></tr>
+      <tr><td>Object.entries(obj)</td><td>Get [key, value] pairs</td></tr>
+      <tr><td>Object.fromEntries(pairs)</td><td>Convert pairs back to object</td></tr>
+      <tr><td>async / await</td><td>Promise-based async code</td></tr>
+      <tr><td>Promise.allSettled()</td><td>Wait for all — no short-circuit</td></tr>
+      <tr><td>import() (dynamic)</td><td>Lazy / conditional module loading</td></tr>
+      <tr><td>structuredClone(obj)</td><td>Deep clone (built-in)</td></tr>
+      <tr><td>crypto.randomUUID()</td><td>Generate UUID v4 (built-in)</td></tr>
+    </table>
+  </div>
+
+  <div class="ad-container" id="ad-cs-bottom"></div>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+</body>
+</html>

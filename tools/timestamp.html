@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timestamp Converter — Unix Timestamp to Date & Back | DevToolKit</title>
+  <meta name="description" content="Free online Unix timestamp converter. Convert Unix timestamps (seconds or milliseconds) to human-readable dates and vice versa. Shows current timestamp.">
+  <meta name="keywords" content="Unix timestamp converter, epoch converter, Unix time, timestamp to date, date to timestamp, epoch time, current timestamp">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/timestamp.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="Timestamp Converter — DevToolKit">
+  <meta property="og:description" content="Convert Unix timestamps to dates and back. Shows current timestamp.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"Timestamp Converter","url":"https://nordicnode.github.io/devtoolkit/tools/timestamp.html","description":"Free online Unix timestamp to date converter.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="../pages/cheatsheets.html">Cheat Sheets</a><a href="../pages/about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>Timestamp Converter</h1><p>Convert Unix timestamps to human-readable dates and vice versa. Supports seconds and milliseconds.</p></div>
+  <div class="ad-container" id="ad-ts-top"></div>
+
+  <!-- Current timestamp -->
+  <div class="status-bar" style="margin-bottom:1.5rem">
+    <span>Current Unix Timestamp:</span>
+    <span id="current-ts" style="color:var(--green);font-family:var(--font-mono);font-weight:600"></span>
+    <button class="btn btn-sm" onclick="copyCurrentTs()">📋</button>
+  </div>
+
+  <div class="tool-container">
+    <!-- Timestamp to Date -->
+    <div class="hash-item">
+      <div class="algo-name">Timestamp → Date</div>
+      <div style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+        <input type="text" id="ts-input" placeholder="e.g. 1750896000" style="flex:1;min-width:150px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:0.5rem 0.75rem;font-family:var(--font-mono);font-size:0.875rem;outline:none">
+        <label style="font-size:0.8125rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem"><input type="checkbox" id="ts-ms"> milliseconds</label>
+        <button class="btn btn-primary btn-sm" onclick="tsToDate()">→ Convert</button>
+      </div>
+      <div id="ts-date-output" class="hash-value" style="margin-top:0.5rem">—</div>
+    </div>
+
+    <!-- Date to Timestamp -->
+    <div class="hash-item" style="margin-top:0.75rem">
+      <div class="algo-name">Date → Timestamp</div>
+      <div style="margin-top:0.5rem;display:flex;gap:0.5rem;flex-wrap:wrap">
+        <input type="datetime-local" id="date-input" style="flex:1;min-width:200px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:0.5rem 0.75rem;font-size:0.875rem;outline:none">
+        <button class="btn btn-primary btn-sm" onclick="dateToTs()">→ Convert</button>
+      </div>
+      <div id="date-ts-output" class="hash-value" style="margin-top:0.5rem">—</div>
+    </div>
+
+    <!-- Quick timestamps -->
+    <div style="margin-top:1.5rem">
+      <h3 style="font-size:0.9375rem;font-weight:600;margin-bottom:0.75rem">Common Timestamps</h3>
+      <div class="hash-grid" id="quick-ts"></div>
+    </div>
+  </div>
+
+  <div class="ad-container" id="ad-ts-bottom"></div>
+  <section class="info-section">
+    <h2>Unix Timestamp Reference</h2>
+    <table class="cheat-table">
+      <tr><th>Language</th><th>Get Current Timestamp</th></tr>
+      <tr><td>JavaScript</td><td>Math.floor(Date.now() / 1000)</td></tr>
+      <tr><td>Python</td><td>import time; int(time.time())</td></tr>
+      <tr><td>PHP</td><td>time()</td></tr>
+      <tr><td>Ruby</td><td>Time.now.to_i</td></tr>
+      <tr><td>Go</td><td>time.Now().Unix()</td></tr>
+      <tr><td>Bash</td><td>date +%s</td></tr>
+    </table>
+  </section>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="../pages/about.html">About</a><a href="../pages/privacy.html">Privacy</a><a href="../pages/contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+<script>
+function pad(n){return String(n).padStart(2,'0')}
+function formatDate(d){
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())} UTC${d.getTimezoneOffset()<=0?'+':'-'}${pad(Math.floor(Math.abs(d.getTimezoneOffset())/60))}:${pad(Math.abs(d.getTimezoneOffset())%60)}`;
+}
+
+function updateCurrentTs(){
+  const now=Math.floor(Date.now()/1000);
+  document.getElementById('current-ts').textContent=now;
+}
+setInterval(updateCurrentTs,1000);updateCurrentTs();
+
+function tsToDate(){
+  const input=document.getElementById('ts-input').value.trim();if(!input)return;
+  let ts=parseInt(input);if(isNaN(ts)){document.getElementById('ts-date-output').textContent='Invalid number';return}
+  if(document.getElementById('ts-ms').checked){/* keep as ms */}else{ts*=1000}
+  const d=new Date(ts);
+  if(isNaN(d.getTime())){document.getElementById('ts-date-output').textContent='Invalid timestamp';return}
+  document.getElementById('ts-date-output').textContent=formatDate(d)+'\nISO: '+d.toISOString()+'\nLocal: '+d.toLocaleString();
+}
+
+function dateToTs(){
+  const input=document.getElementById('date-input').value;if(!input)return;
+  const d=new Date(input);if(isNaN(d.getTime())){document.getElementById('date-ts-output').textContent='Invalid date';return}
+  const sec=Math.floor(d.getTime()/1000);
+  document.getElementById('date-ts-output').textContent='Seconds: '+sec+'\nMilliseconds: '+d.getTime();
+}
+
+function copyCurrentTs(){navigator.clipboard.writeText(String(Math.floor(Date.now()/1000)));showToast('Current timestamp copied')}
+
+// Populate common timestamps
+const now=new Date();
+const startOfDay=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+const startOfWeek=new Date(startOfDay);startOfWeek.setDate(startOfWeek.getDate()-startOfWeek.getDay());
+const startOfMonth=new Date(now.getFullYear(),now.getMonth(),1);
+const startOfYear=new Date(now.getFullYear(),0,1);
+const quickDates=[
+  {label:'Start of today',date:startOfDay},
+  {label:'Start of this week',date:startOfWeek},
+  {label:'Start of this month',date:startOfMonth},
+  {label:'Start of this year',date:startOfYear},
+  {label:'1 hour ago',date:new Date(Date.now()-3600000)},
+  {label:'24 hours ago',date:new Date(Date.now()-86400000)},
+  {label:'7 days ago',date:new Date(Date.now()-7*86400000)},
+  {label:'30 days ago',date:new Date(Date.now()-30*86400000)},
+];
+document.getElementById('quick-ts').innerHTML=quickDates.map(({label,date})=>{
+  const ts=Math.floor(date.getTime()/1000);
+  return `<div class="hash-item"><div class="algo-name">${label}</div><div class="hash-value" style="cursor:pointer" onclick="navigator.clipboard.writeText('${ts}');showToast('Copied')">${ts}</div></div>`;
+}).join('');
+
+// Set default date input to now
+document.getElementById('date-input').value=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,16);
+
+function showToast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},2000)}
+</script>
+</body>
+</html>

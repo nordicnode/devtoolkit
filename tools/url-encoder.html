@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Encoder/Decoder — Encode & Decode URLs | DevToolKit</title>
+  <meta name="description" content="Free online URL encoder and decoder. Encode/decode URLs, query parameters, and form data. Supports full URL and component encoding.">
+  <meta name="keywords" content="URL encoder, URL decoder, percent encoding, encodeURIComponent, encodeURI, URL encoding, query string encoder, online URL tool">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/url-encoder.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="URL Encoder/Decoder — DevToolKit">
+  <meta property="og:description" content="Encode and decode URLs and query parameters.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"URL Encoder/Decoder","url":"https://nordicnode.github.io/devtoolkit/tools/url-encoder.html","description":"Free online URL encoder and decoder.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="../pages/cheatsheets.html">Cheat Sheets</a><a href="../pages/about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>URL Encoder / Decoder</h1><p>Encode and decode URLs, query parameters, and form data with full or component mode.</p></div>
+  <div class="ad-container" id="ad-url-top"></div>
+  <div class="tool-container">
+    <div class="input-group">
+      <div class="group-header"><span>Input</span>
+        <div class="btn-row">
+          <label style="font-size:0.8125rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem"><input type="radio" name="mode" id="mode-component" checked> Component</label>
+          <label style="font-size:0.8125rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem"><input type="radio" name="mode" id="mode-full"> Full URL</label>
+        </div>
+      </div>
+      <textarea id="url-input" placeholder="Enter URL or text to encode/decode...">https://example.com/search?q=hello world&lang=en&filter=price > $100</textarea>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="encode()">🔒 Encode</button>
+      <button class="btn" onclick="decode()">🔓 Decode</button>
+      <button class="btn btn-success" onclick="copyOutput()">📋 Copy</button>
+      <button class="btn" onclick="swap()">⇄ Swap</button>
+      <button class="btn btn-danger" onclick="clearAll()">✕ Clear</button>
+    </div>
+    <div class="output-group"><div class="group-header"><span>Output</span></div><div id="url-output" class="output-area">Click "Encode" or "Decode" to see the result.</div></div>
+  </div>
+  <div class="ad-container" id="ad-url-bottom"></div>
+  <section class="info-section">
+    <h2>encodeURIComponent vs encodeURI</h2>
+    <p><code>encodeURIComponent</code> encodes all special characters including <code>/?:&=+@#</code> — use it for query parameter values.</p>
+    <p><code>encodeURI</code> preserves URL structure characters — use it for full URLs where you need the slashes and colons to remain intact.</p>
+    <table class="cheat-table" style="margin-top:1rem">
+      <tr><th>Character</th><th>Component</th><th>Full URL</th></tr>
+      <tr><td>/</td><td>%2F</td><td>/ (preserved)</td></tr>
+      <tr><td>?</td><td>%3F</td><td>? (preserved)</td></tr>
+      <tr><td>&</td><td>%26</td><td>& (preserved)</td></tr>
+      <tr><td>=</td><td>%3D</td><td>= (preserved)</td></tr>
+      <tr><td>#</td><td>%23</td><td># (preserved)</td></tr>
+      <tr><td>space</td><td>%20</td><td>%20</td></tr>
+    </table>
+  </section>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="../pages/about.html">About</a><a href="../pages/privacy.html">Privacy</a><a href="../pages/contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+<script>
+const urlIn=document.getElementById('url-input'),urlOut=document.getElementById('url-output');
+function isComponent(){return document.getElementById('mode-component').checked}
+function encode(){const t=urlIn.value;if(!t)return;try{urlOut.style.color='var(--green)';urlOut.textContent=isComponent()?encodeURIComponent(t):encodeURI(t)}catch(e){urlOut.style.color='var(--red)';urlOut.textContent='Error: '+e.message}}
+function decode(){const t=urlIn.value;if(!t)return;try{urlOut.style.color='var(--green)';urlOut.textContent=decodeURIComponent(t)}catch(e){urlOut.style.color='var(--red)';urlOut.textContent='Error: '+e.message}}
+function copyOutput(){const t=urlOut.textContent;if(t&&!t.startsWith('Click'))navigator.clipboard.writeText(t);showToast('Copied')}
+function swap(){const tmp=urlIn.value;urlIn.value=urlOut.textContent;urlOut.textContent=tmp}
+function clearAll(){urlIn.value='';urlOut.textContent='Click "Encode" or "Decode" to see the result.';urlOut.style.color='var(--text)'}
+function showToast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},2000)}
+</script>
+</body>
+</html>

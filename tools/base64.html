@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base64 Encode/Decode — Online Encoder Decoder | DevToolKit</title>
+  <meta name="description" content="Free online Base64 encoder and decoder. Encode text to Base64 or decode Base64 strings. Supports URL-safe Base64, file encoding, and auto-detection.">
+  <meta name="keywords" content="base64 encoder, base64 decoder, base64 online, url safe base64, encode decode, base64 file, base64 image">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/base64.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="Base64 Encode/Decode — DevToolKit">
+  <meta property="og:description" content="Encode and decode Base64 strings. URL-safe mode and auto-detection included.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Base64 Encoder/Decoder",
+    "url": "https://nordicnode.github.io/devtoolkit/tools/base64.html",
+    "description": "Free online Base64 encoder and decoder with URL-safe mode.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a>
+    <nav>
+      <a href="../index.html">Tools</a>
+      <a href="../pages/cheatsheets.html">Cheat Sheets</a>
+      <a href="../pages/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="tool-header">
+    <h1>Base64 Encode / Decode</h1>
+    <p>Encode text to Base64 or decode Base64 strings with URL-safe mode support.</p>
+  </div>
+
+  <div class="ad-container" id="ad-b64-top"><!-- Ad slot --></div>
+
+  <div class="tool-container">
+    <div class="input-group">
+      <div class="group-header">
+        <span>Input</span>
+        <div class="btn-row">
+          <label style="font-size:0.8125rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem">
+            <input type="checkbox" id="url-safe"> URL-safe
+          </label>
+        </div>
+      </div>
+      <textarea id="b64-input" placeholder="Type or paste text to encode, or Base64 to decode...">Hello, DevToolKit!</textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="encode()">🔒 Encode</button>
+      <button class="btn" onclick="decode()">🔓 Decode</button>
+      <button class="btn btn-success" onclick="copyOutput()">📋 Copy</button>
+      <button class="btn" onclick="swap()">⇄ Swap</button>
+      <button class="btn btn-danger" onclick="clearAll()">✕ Clear</button>
+    </div>
+
+    <div class="status-bar" id="b64-status">
+      <span id="b64-info">Ready</span>
+    </div>
+
+    <div class="output-group">
+      <div class="group-header">
+        <span>Output</span>
+        <span id="b64-output-len" style="font-size:0.75rem;color:var(--text-secondary)"></span>
+      </div>
+      <div id="b64-output" class="output-area">Click "Encode" or "Decode" to see the result.</div>
+    </div>
+  </div>
+
+  <div class="ad-container" id="ad-b64-bottom"><!-- Ad slot --></div>
+
+  <section class="info-section">
+    <h2>About Base64 Encoding</h2>
+    <p>Base64 is a binary-to-text encoding scheme that represents binary data as an ASCII string. It's commonly used to embed data in URLs, JSON, HTML, and CSS.</p>
+    <p style="margin-top:0.75rem"><strong>URL-safe Base64</strong> replaces <code>+</code> with <code>-</code> and <code>/</code> with <code>_</code>, and removes trailing <code>=</code> padding — making it safe for use in URLs and filenames.</p>
+    <table class="cheat-table" style="margin-top:1rem">
+      <tr><th>Use Case</th><th>When to Use</th></tr>
+      <tr><td>Data URLs</td><td>Embedding small images or fonts in CSS/HTML</td></tr>
+      <tr><td>JWT tokens</td><td>Base64URL encoding for header and payload</td></tr>
+      <tr><td>Email attachments</td><td>MIME encoding for binary files</td></tr>
+      <tr><td>API payloads</td><td>Sending binary data in JSON requests</td></tr>
+    </table>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="../pages/about.html">About</a>
+      <a href="../pages/privacy.html">Privacy</a>
+      <a href="../pages/contact.html">Contact</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 DevToolKit. All tools run locally in your browser.</p>
+  </div>
+</footer>
+
+<script>
+const b64Input = document.getElementById('b64-input');
+const b64Output = document.getElementById('b64-output');
+const b64Info = document.getElementById('b64-info');
+const b64Len = document.getElementById('b64-output-len');
+
+function encode() {
+  const text = b64Input.value;
+  if (!text) { b64Info.textContent = 'No input'; b64Info.className='invalid'; return; }
+  try {
+    const bytes = new TextEncoder().encode(text);
+    let binary = '';
+    bytes.forEach(b => binary += String.fromCharCode(b));
+    let result = btoa(binary);
+    if (document.getElementById('url-safe').checked) {
+      result = result.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+    b64Output.textContent = result;
+    b64Output.style.color = 'var(--green)';
+    b64Info.textContent = '✓ Encoded successfully';
+    b64Info.className = 'valid';
+    b64Len.textContent = result.length + ' chars';
+  } catch (e) {
+    b64Output.textContent = e.message;
+    b64Output.style.color = 'var(--red)';
+    b64Info.textContent = '✗ Encoding failed';
+    b64Info.className = 'invalid';
+  }
+}
+
+function decode() {
+  let text = b64Input.value.trim();
+  if (!text) { b64Info.textContent = 'No input'; b64Info.className='invalid'; return; }
+  try {
+    if (document.getElementById('url-safe').checked) {
+      text = text.replace(/-/g, '+').replace(/_/g, '/');
+      while (text.length % 4) text += '=';
+    }
+    const binary = atob(text);
+    const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+    const result = new TextDecoder().decode(bytes);
+    b64Output.textContent = result;
+    b64Output.style.color = 'var(--green)';
+    b64Info.textContent = '✓ Decoded successfully';
+    b64Info.className = 'valid';
+    b64Len.textContent = result.length + ' chars';
+  } catch (e) {
+    b64Output.textContent = 'Invalid Base64: ' + e.message;
+    b64Output.style.color = 'var(--red)';
+    b64Info.textContent = '✗ Decoding failed — not valid Base64';
+    b64Info.className = 'invalid';
+  }
+}
+
+function copyOutput() {
+  const t = b64Output.textContent;
+  if (!t || t.startsWith('Click')) return;
+  navigator.clipboard.writeText(t);
+  showToast('Copied to clipboard');
+}
+
+function swap() {
+  const tmp = b64Input.value;
+  b64Input.value = b64Output.textContent;
+  b64Output.textContent = tmp;
+}
+
+function clearAll() {
+  b64Input.value = '';
+  b64Output.textContent = 'Click "Encode" or "Decode" to see the result.';
+  b64Output.style.color = 'var(--text)';
+  b64Info.textContent = 'Ready';
+  b64Info.className = '';
+  b64Len.textContent = '';
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2000);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Sitemap: https://nordicnode.github.io/devtoolkit/sitemap.xml
+
+# DevToolKit — all tools are public, crawl everything

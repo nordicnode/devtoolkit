@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Regex Tester — Test & Debug Regular Expressions | DevToolKit</title>
+  <meta name="description" content="Free online regex tester. Test, debug, and validate regular expressions with real-time matching, group capture highlights, and detailed match info.">
+  <meta name="keywords" content="regex tester, regular expression tester, regex validator, regex debugger, regex matching, regex groups, online regex tool">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/regex-tester.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="Regex Tester — DevToolKit">
+  <meta property="og:description" content="Test and debug regular expressions with real-time matching and group capture.">
+  <meta property="og:type" content="website">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Regex Tester",
+    "url": "https://nordicnode.github.io/devtoolkit/tools/regex-tester.html",
+    "description": "Free online regex tester with real-time matching, group capture, and error reporting.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a>
+    <nav>
+      <a href="../index.html">Tools</a>
+      <a href="../pages/cheatsheets.html">Cheat Sheets</a>
+      <a href="../pages/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="tool-header">
+    <h1>Regex Tester</h1>
+    <p>Test, debug, and validate regular expressions with real-time matching and group capture.</p>
+  </div>
+
+  <div class="ad-container" id="ad-regex-top"><!-- Ad slot --></div>
+
+  <div class="tool-container">
+    <div class="input-group">
+      <div class="group-header">
+        <span>Pattern</span>
+        <div class="btn-row">
+          <label style="font-size:0.8125rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem">
+            <input type="checkbox" id="flag-g" checked> g
+          </label>
+          <label style="font-size:0.8125rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem">
+            <input type="checkbox" id="flag-i"> i
+          </label>
+          <label style="font-size:0.8125rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem">
+            <input type="checkbox" id="flag-m"> m
+          </label>
+          <label style="font-size:0.8125rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem">
+            <input type="checkbox" id="flag-s"> s
+          </label>
+        </div>
+      </div>
+      <div style="padding:0.25rem 1rem;display:flex;align-items:center;gap:0.5rem">
+        <span style="color:var(--accent);font-family:var(--font-mono)">/</span>
+        <input type="text" id="regex-pattern" placeholder="Enter regex pattern..." style="flex:1;background:transparent;border:none;color:var(--text);font-family:var(--font-mono);font-size:1.125rem;outline:none" value="(\w+)@(\w+)\.(\w+)">
+        <span style="color:var(--accent);font-family:var(--font-mono)">/</span>
+        <span id="flags-display" style="color:var(--yellow);font-family:var(--font-mono);font-size:0.875rem">g</span>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <div class="group-header"><span>Test String</span></div>
+      <textarea id="regex-input" placeholder="Enter text to test against...">user@example.com
+admin@company.org
+not-an-email
+test@domain.co.uk
+hello world
+another@site.dev</textarea>
+    </div>
+
+    <div class="status-bar" id="regex-status">
+      <span id="match-count">0 matches</span>
+      <span id="regex-error" class="invalid" style="display:none"></span>
+    </div>
+
+    <div class="output-group">
+      <div class="group-header">
+        <span>Match Result</span>
+        <button class="btn btn-sm" onclick="copyMatches()">📋 Copy Matches</button>
+      </div>
+      <div id="regex-output" class="output-area" style="padding:0.875rem 1rem"></div>
+    </div>
+
+    <div class="output-group">
+      <div class="group-header"><span>Group Details</span></div>
+      <div id="regex-groups" style="padding:0.875rem 1rem;font-family:var(--font-mono);font-size:0.8125rem;color:var(--text-secondary);white-space:pre-wrap"></div>
+    </div>
+  </div>
+
+  <div class="ad-container" id="ad-regex-bottom"><!-- Ad slot --></div>
+
+  <section class="info-section">
+    <h2>How to Use the Regex Tester</h2>
+    <p>Enter your regular expression pattern in the top field and your test string below it. Matches are highlighted in real-time as you type. The flags <code>g</code> (global), <code>i</code> (case-insensitive), <code>m</code> (multiline), and <code>s</code> (dotAll) can be toggled independently.</p>
+    <p style="margin-top:0.75rem"><strong>Common regex patterns:</strong></p>
+    <table class="cheat-table">
+      <tr><td>\d+</td><td>Match one or more digits</td></tr>
+      <tr><td>[a-zA-Z]+</td><td>Match one or more letters</td></tr>
+      <tr><td>^\w+@\w+\.\w+$</td><td>Simple email pattern</td></tr>
+      <tr><td>https?://\S+</td><td>Match HTTP/HTTPS URLs</td></tr>
+      <tr><td>\b\w{3,}\b</td><td>Match words with 3+ characters</td></tr>
+    </table>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="../pages/about.html">About</a>
+      <a href="../pages/privacy.html">Privacy</a>
+      <a href="../pages/contact.html">Contact</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 DevToolKit. All tools run locally in your browser.</p>
+  </div>
+</footer>
+
+<script>
+const patternEl = document.getElementById('regex-pattern');
+const inputEl = document.getElementById('regex-input');
+const outputEl = document.getElementById('regex-output');
+const groupsEl = document.getElementById('regex-groups');
+const matchCountEl = document.getElementById('match-count');
+const errorEl = document.getElementById('regex-error');
+const flagsDisplay = document.getElementById('flags-display');
+
+function getFlags() {
+  let f = '';
+  if (document.getElementById('flag-g').checked) f += 'g';
+  if (document.getElementById('flag-i').checked) f += 'i';
+  if (document.getElementById('flag-m').checked) f += 'm';
+  if (document.getElementById('flag-s').checked) f += 's';
+  return f;
+}
+
+function updateFlags() { flagsDisplay.textContent = getFlags() || '—'; }
+['flag-g','flag-i','flag-m','flag-s'].forEach(id => document.getElementById(id).addEventListener('change', () => { updateFlags(); runRegex(); }));
+
+function escapeHtml(s) { return s.replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>'); }
+
+function runRegex() {
+  const pattern = patternEl.value;
+  const text = inputEl.value;
+  const flags = getFlags();
+  outputEl.innerHTML = '';
+  groupsEl.textContent = '';
+  errorEl.style.display = 'none';
+  matchCountEl.className = '';
+
+  if (!pattern) {
+    outputEl.innerHTML = '<span style="color:var(--text-secondary)">Enter a pattern to see matches...</span>';
+    matchCountEl.textContent = '0 matches';
+    return;
+  }
+
+  let regex;
+  try { regex = new RegExp(pattern, flags); }
+  catch (e) {
+    errorEl.textContent = e.message;
+    errorEl.style.display = 'inline';
+    matchCountEl.textContent = 'Invalid pattern';
+    matchCountEl.className = 'invalid';
+    return;
+  }
+
+  if (!flags.includes('g')) {
+    const m = regex.exec(text);
+    if (m) {
+      highlightSingleMatch(text, m);
+    } else {
+      outputEl.innerHTML = escapeHtml(text);
+      matchCountEl.textContent = '0 matches';
+      matchCountEl.className = 'invalid';
+    }
+    return;
+  }
+
+  const matches = [...text.matchAll(regex)];
+  matchCountEl.textContent = `${matches.length} match${matches.length !== 1 ? 'es' : ''}`;
+  matchCountEl.className = matches.length > 0 ? 'valid' : 'invalid';
+
+  if (matches.length === 0) {
+    outputEl.innerHTML = escapeHtml(text);
+    return;
+  }
+
+  // Build highlighted output
+  let html = '';
+  let lastIdx = 0;
+  const groupInfo = [];
+
+  matches.forEach((m, mi) => {
+    html += escapeHtml(text.slice(lastIdx, m.index));
+    html += `<span class="regex-match-highlight" style="background:rgba(63,185,80,0.25);border-radius:2px">${escapeHtml(m[0])}</span>`;
+    lastIdx = m.index + m[0].length;
+
+    if (m.groups || m.length > 1) {
+      groupInfo.push(`Match ${mi + 1}:`);
+      for (let i = 1; i < m.length; i++) {
+        groupInfo.push(`  Group ${i}: "${m[i] ?? 'undefined'}" (index ${m.index + (m.indices?.[i]?.[0] ?? '?')})`);
+      }
+      if (m.groups) {
+        for (const [name, val] of Object.entries(m.groups)) {
+          groupInfo.push(`  Named "${name}": "${val ?? 'undefined'}"`);
+        }
+      }
+    }
+  });
+  html += escapeHtml(text.slice(lastIdx));
+  outputEl.innerHTML = html;
+  groupsEl.textContent = groupInfo.join('\n') || 'No groups captured. Use parentheses () in your pattern.';
+}
+
+function highlightSingleMatch(text, m) {
+  matchCountEl.textContent = '1 match';
+  matchCountEl.className = 'valid';
+  let html = escapeHtml(text.slice(0, m.index));
+  html += `<span class="regex-match-highlight">${escapeHtml(m[0])}</span>`;
+  html += escapeHtml(text.slice(m.index + m[0].length));
+  outputEl.innerHTML = html;
+
+  const groupInfo = [];
+  for (let i = 1; i < m.length; i++) {
+    groupInfo.push(`Group ${i}: "${m[i] ?? 'undefined'}"`);
+  }
+  groupsEl.textContent = groupInfo.join('\n') || 'No groups captured.';
+}
+
+function copyMatches() {
+  const text = inputEl.value;
+  const pattern = patternEl.value;
+  const flags = getFlags();
+  if (!pattern) return;
+  try {
+    const regex = new RegExp(pattern, flags.includes('g') ? flags : flags + 'g');
+    const matches = [...text.matchAll(regex)].map(m => m[0]);
+    navigator.clipboard.writeText(matches.join('\n'));
+    showToast(`Copied ${matches.length} matches`);
+  } catch {}
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2000);
+}
+
+patternEl.addEventListener('input', runRegex);
+inputEl.addEventListener('input', runRegex);
+runRegex();
+</script>
+</body>
+</html>

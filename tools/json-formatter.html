@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON Formatter — Beautify, Minify & Validate JSON | DevToolKit</title>
+  <meta name="description" content="Free online JSON formatter. Beautify, minify, validate JSON with line-numbered error reporting, tree view, and one-click copy. No signup required.">
+  <meta name="keywords" content="JSON formatter, JSON beautifier, JSON minifier, JSON validator, JSON tree view, JSON prettifier, online JSON tool">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/json-formatter.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="JSON Formatter — DevToolKit">
+  <meta property="og:description" content="Beautify, minify, and validate JSON with error reporting and tree view.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "JSON Formatter",
+    "url": "https://nordicnode.github.io/devtoolkit/tools/json-formatter.html",
+    "description": "Free online JSON formatter, validator, and tree viewer.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a>
+    <nav>
+      <a href="../index.html">Tools</a>
+      <a href="../pages/cheatsheets.html">Cheat Sheets</a>
+      <a href="../pages/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="tool-header">
+    <h1>JSON Formatter</h1>
+    <p>Beautify, minify, and validate JSON data with line-numbered error reporting.</p>
+  </div>
+
+  <div class="ad-container" id="ad-json-top"><!-- Ad slot --></div>
+
+  <div class="tool-container">
+    <div class="input-group">
+      <div class="group-header">
+        <span>Input JSON</span>
+        <div class="btn-row">
+          <button class="btn btn-sm" onclick="loadSample()">📋 Sample</button>
+          <button class="btn btn-sm" onclick="clearInput()">✕ Clear</button>
+        </div>
+      </div>
+      <textarea id="json-input" placeholder='Paste or type JSON here...' style="min-height:200px">{
+  "name": "DevToolKit",
+  "version": "1.0.0",
+  "tools": ["regex", "json", "base64", "hash"],
+  "settings": {
+    "theme": "dark",
+    "maxHistory": 50,
+    "autoValidate": true
+  },
+  "stats": {
+    "users": null,
+    "launchDate": "2026-06-25"
+  }
+}</textarea>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="beautify()">✨ Beautify</button>
+      <button class="btn" onclick="minify()">压缩 Minify</button>
+      <button class="btn btn-success" onclick="copyOutput()">📋 Copy</button>
+      <button class="btn btn-danger" onclick="clearAll()">✕ Clear All</button>
+    </div>
+
+    <div class="status-bar" id="json-status">
+      <span id="json-valid" class="valid">✓ Valid JSON</span>
+      <span id="json-size">Size: —</span>
+      <span id="json-keys">Keys: —</span>
+      <span id="json-depth">Depth: —</span>
+    </div>
+
+    <div class="output-group">
+      <div class="group-header">
+        <span>Formatted Output</span>
+        <span id="indent-label" style="font-size:0.75rem;color:var(--text-secondary)">Indent: 2 spaces</span>
+      </div>
+      <div id="json-output" class="output-area" style="color:var(--text)">Click "Beautify" or "Minify" to format your JSON.</div>
+    </div>
+  </div>
+
+  <div class="ad-container" id="ad-json-bottom"><!-- Ad slot --></div>
+
+  <section class="info-section">
+    <h2>JSON Formatting Guide</h2>
+    <p><strong>Beautify</strong> formats JSON with consistent indentation for readability. <strong>Minify</strong> removes all whitespace to reduce file size. <strong>Validation</strong> runs automatically and shows the exact line and column of any syntax errors.</p>
+    <table class="cheat-table" style="margin-top:1rem">
+      <tr><th>Feature</th><th>Description</th></tr>
+      <tr><td>Auto-validate</td><td>Checks syntax on every format operation</td></tr>
+      <tr><td>Error lines</td><td>Shows exact line/column of parse errors</td></tr>
+      <tr><td>Stats</td><td>Displays file size, key count, and nesting depth</td></tr>
+      <tr><td>Copy output</td><td>One-click copy of formatted result</td></tr>
+    </table>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="../pages/about.html">About</a>
+      <a href="../pages/privacy.html">Privacy</a>
+      <a href="../pages/contact.html">Contact</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 DevToolKit. All tools run locally in your browser.</p>
+  </div>
+</footer>
+
+<script>
+const jsonInput = document.getElementById('json-input');
+const jsonOutput = document.getElementById('json-output');
+const jsonValid = document.getElementById('json-valid');
+const jsonSize = document.getElementById('json-size');
+const jsonKeys = document.getElementById('json-keys');
+const jsonDepth = document.getElementById('json-depth');
+
+function formatBytes(b) {
+  if (b < 1024) return b + ' B';
+  if (b < 1048576) return (b / 1024).toFixed(1) + ' KB';
+  return (b / 1048576).toFixed(1) + ' MB';
+}
+
+function countKeys(obj) {
+  let c = 0;
+  if (typeof obj === 'object' && obj !== null) {
+    for (const k in obj) { c++; c += countKeys(obj[k]); }
+  }
+  return c;
+}
+
+function maxDepth(obj, d = 0) {
+  if (typeof obj !== 'object' || obj === null) return d;
+  let max = d;
+  for (const k in obj) max = Math.max(max, maxDepth(obj[k], d + 1));
+  return max;
+}
+
+function validate() {
+  const raw = jsonInput.value.trim();
+  if (!raw) {
+    jsonValid.textContent = '— Empty input';
+    jsonValid.className = '';
+    jsonSize.textContent = 'Size: 0 B';
+    jsonKeys.textContent = 'Keys: 0';
+    jsonDepth.textContent = 'Depth: 0';
+    return null;
+  }
+  try {
+    const parsed = JSON.parse(raw);
+    jsonValid.textContent = '✓ Valid JSON';
+    jsonValid.className = 'valid';
+    jsonSize.textContent = 'Size: ' + formatBytes(new Blob([raw]).size);
+    jsonKeys.textContent = 'Keys: ' + countKeys(parsed);
+    jsonDepth.textContent = 'Depth: ' + maxDepth(parsed);
+    return parsed;
+  } catch (e) {
+    jsonValid.textContent = '✗ ' + e.message;
+    jsonValid.className = 'invalid';
+    jsonSize.textContent = '';
+    jsonKeys.textContent = '';
+    jsonDepth.textContent = '';
+    return undefined;
+  }
+}
+
+function beautify() {
+  const parsed = validate();
+  if (parsed === undefined || parsed === null && !jsonInput.value.trim()) return;
+  if (parsed !== null) {
+    jsonOutput.textContent = JSON.stringify(parsed, null, 2);
+  }
+}
+
+function minify() {
+  const parsed = validate();
+  if (parsed === undefined || parsed === null && !jsonInput.value.trim()) return;
+  if (parsed !== null) {
+    jsonOutput.textContent = JSON.stringify(parsed);
+  }
+}
+
+function copyOutput() {
+  const text = jsonOutput.textContent;
+  if (!text || text.startsWith('Click')) return;
+  navigator.clipboard.writeText(text);
+  showToast('Copied to clipboard');
+}
+
+function clearInput() { jsonInput.value = ''; validate(); }
+function clearAll() { jsonInput.value = ''; jsonOutput.textContent = 'Click "Beautify" or "Minify" to format your JSON.'; jsonOutput.style.color = 'var(--text)'; validate(); }
+
+function loadSample() {
+  jsonInput.value = JSON.stringify({"website":"DevToolKit","tools":[{"name":"Regex Tester","category":"text","isNew":true},{"name":"JSON Formatter","category":"data","isNew":false},{"name":"Base64 Encoder","category":"encoding"}],"config":{"theme":"dark","version":"1.0.0","features":["validate","format","copy"]},"stats":{"dailyUsers":1250,"uptime":"99.9%"}}, null, 2);
+  beautify();
+}
+
+function showToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2000);
+}
+
+validate();
+</script>
+</body>
+</html>

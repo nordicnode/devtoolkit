@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTML Entity Encoder — Encode & Decode HTML Entities | DevToolKit</title>
+  <meta name="description" content="Free online HTML entity encoder and decoder. Convert special characters to HTML entities (named, decimal, hex) and back.">
+  <meta name="keywords" content="HTML entity encoder, HTML entity decoder, HTML special characters, HTML escape, & entity, numeric entity, named entity, online HTML encoder">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/html-entities.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="HTML Entity Encoder — DevToolKit">
+  <meta property="og:description" content="Encode and decode HTML entities. Named, decimal, and hex formats.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"HTML Entity Encoder","url":"https://nordicnode.github.io/devtoolkit/tools/html-entities.html","description":"Free online HTML entity encoder and decoder.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="../pages/cheatsheets.html">Cheat Sheets</a><a href="../pages/about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>HTML Entity Encoder</h1><p>Encode special characters to HTML entities and decode them back. Supports named, decimal, and hex formats.</p></div>
+  <div class="ad-container" id="ad-html-top"></div>
+  <div class="tool-container">
+    <div class="input-group"><div class="group-header"><span>Input Text</span></div><textarea id="html-input" placeholder="Enter text with special characters..."><div class="hello">& "Hello" World</div>
+Price: $10 < 20 > 5
+Use &#38; for &</textarea></div>
+    <div class="btn-row" style="margin-top:1rem">
+      <button class="btn btn-primary" onclick="encode('named')">🔤 Named Entities</button>
+      <button class="btn" onclick="encode('decimal')">🔢 Decimal</button>
+      <button class="btn" onclick="encode('hex')">0x Hex</button>
+      <button class="btn" onclick="decode()">🔓 Decode</button>
+      <button class="btn btn-success" onclick="copyOutput()">📋 Copy</button>
+    </div>
+    <div class="output-group" style="margin-top:1rem"><div class="group-header"><span>Output</span></div><div id="html-output" class="output-area">Click a button above to encode or decode.</div></div>
+  </div>
+  <div class="ad-container" id="ad-html-bottom"></div>
+  <section class="info-section">
+    <h2>Common HTML Entities</h2>
+    <table class="cheat-table">
+      <tr><th>Char</th><th>Named</th><th>Decimal</th><th>Hex</th></tr>
+      <tr><td>&</td><td>&</td><td>&#38;</td><td>&#x26;</td></tr>
+      <tr><td><</td><td>&lt;</td><td>&#60;</td><td>&#x3C;</td></tr>
+      <tr><td>></td><td>&gt;</td><td>&#62;</td><td>&#x3E;</td></tr>
+      <tr><td>"</td><td>"</td><td>&#34;</td><td>&#x22;</td></tr>
+      <tr><td>'</td><td>'</td><td>&#39;</td><td>&#x27;</td></tr>
+      <tr><td>©</td><td>&copy;</td><td>&#169;</td><td>&#xA9;</td></tr>
+      <tr><td>®</td><td>&reg;</td><td>&#174;</td><td>&#xAE;</td></tr>
+      <tr><td>€</td><td>&euro;</td><td>&#8364;</td><td>&#x20AC;</td></tr>
+      <tr><td> </td><td>&nbsp;</td><td>&#160;</td><td>&#xA0;</td></tr>
+    </table>
+  </section>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="../pages/about.html">About</a><a href="../pages/privacy.html">Privacy</a><a href="../pages/contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+<script>
+const namedEntities={'&':'&','<':'<','>':'>','"':'"',"'":''','©':'&copy;','®':'&reg;','€':'&euro;','£':'&pound;','¥':'&yen;','¢':'&cent;','§':'&sect;','±':'&plusmn;','×':'&times;','÷':'&divide;','°':'&deg;','¶':'&para;','•':'&bull;','…':'&hellip;','—':'&mdash;','–':'&ndash;','←':'&larr;','→':'&rarr;','↑':'&uarr;','↓':'&darr;','™':'&trade;',' ':'&nbsp;'};
+const htmlIn=document.getElementById('html-input'),htmlOut=document.getElementById('html-output');
+function encode(mode){
+  const text=htmlIn.value;if(!text)return;
+  let result='';
+  for(const ch of text){
+    const code=ch.codePointAt(0);
+    if(mode==='named'&&namedEntities[ch]){result+=namedEntities[ch]}
+    else if(mode==='decimal'){result+=(ch.charCodeAt(0)>127||'&<"\''.includes(ch))?'&#'+code+';':ch}
+    else if(mode==='hex'){result+=(ch.charCodeAt(0)>127||'&<"\''.includes(ch))?'&#x'+code.toString(16).toUpperCase()+';':ch}
+    else{result+=ch}
+  }
+  htmlOut.style.color='var(--green)';htmlOut.textContent=result;
+}
+function decode(){
+  let text=htmlIn.value;if(!text)return;
+  const ta=document.createElement('textarea');ta.innerHTML=text;htmlOut.style.color='var(--green)';htmlOut.textContent=ta.value;
+}
+function copyOutput(){const t=htmlOut.textContent;if(t&&!t.startsWith('Click'))navigator.clipboard.writeText(t);showToast('Copied')}
+function showToast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},2000)}
+</script>
+</body>
+</html>

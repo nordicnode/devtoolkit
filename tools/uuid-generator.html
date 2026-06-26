@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UUID Generator — Generate RFC 4122 v4 UUIDs | DevToolKit</title>
+  <meta name="description" content="Free online UUID generator. Generate RFC 4122 v4 UUIDs in bulk using crypto.randomUUID(). Copy one or all. Fast, standards-compliant, no signup required.">
+  <meta name="keywords" content="UUID generator, GUID generator, RFC 4122, v4 UUID, unique identifier, random UUID, bulk UUID, online UUID tool">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/uuid-generator.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="UUID Generator — DevToolKit">
+  <meta property="og:description" content="Generate RFC 4122 v4 UUIDs in bulk. Cryptographically random, standards-compliant.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "UUID Generator",
+    "url": "https://nordicnode.github.io/devtoolkit/tools/uuid-generator.html",
+    "description": "Free online RFC 4122 v4 UUID generator with bulk generation support.",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Any",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a>
+    <nav>
+      <a href="../index.html">Tools</a>
+      <a href="../pages/cheatsheets.html">Cheat Sheets</a>
+      <a href="../pages/about.html">About</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="tool-header">
+    <h1>UUID Generator</h1>
+    <p>Generate RFC 4122 version 4 UUIDs using cryptographically secure random numbers.</p>
+  </div>
+
+  <div class="ad-container" id="ad-uuid-top"><!-- Ad slot --></div>
+
+  <div class="tool-container">
+    <div class="btn-row" style="margin-bottom:1rem">
+      <label style="font-size:0.875rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.5rem">
+        Count:
+        <input type="number" id="uuid-count" value="5" min="1" max="1000" style="width:80px;background:var(--bg-tertiary);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:0.375rem 0.625rem;font-size:0.875rem">
+      </label>
+      <label style="font-size:0.875rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem">
+        <input type="checkbox" id="uuid-uppercase"> Uppercase
+      </label>
+      <label style="font-size:0.875rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.25rem">
+        <input type="checkbox" id="uuid-no-dashes"> No dashes
+      </label>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="generate()">⚡ Generate</button>
+      <button class="btn btn-success" onclick="copyAll()">📋 Copy All</button>
+      <button class="btn btn-danger" onclick="clearAll()">✕ Clear</button>
+    </div>
+
+    <div class="output-group">
+      <div class="group-header">
+        <span>Generated UUIDs</span>
+        <span id="uuid-generated-count" style="font-size:0.75rem;color:var(--text-secondary)"></span>
+      </div>
+      <div id="uuid-output" style="padding:0.875rem 1rem;font-family:var(--font-mono);font-size:0.875rem;line-height:1.8">
+      </div>
+    </div>
+  </div>
+
+  <div class="ad-container" id="ad-uuid-bottom"><!-- Ad slot --></div>
+
+  <section class="info-section">
+    <h2>About UUID v4</h2>
+    <p>A UUID (Universally Unique Identifier) version 4 is a 128-bit randomly-generated identifier. The algorithm uses cryptographically secure random numbers, making the probability of collision astronomically low.</p>
+    <table class="cheat-table" style="margin-top:1rem">
+      <tr><th>UUID Version</th><th>Generation Method</th><th>Collision Risk</th></tr>
+      <tr><td>v1</td><td>Timestamp + MAC address</td><td>Low (traceable)</td></tr>
+      <tr><td>v3</td><td>MD5 hash of namespace + name</td><td>Deterministic</td></tr>
+      <tr><td>v4</td><td>Cryptographic random</td><td>~10⁻¹⁸ per UUID</td></tr>
+      <tr><td>v5</td><td>SHA-1 hash of namespace + name</td><td>Deterministic</td></tr>
+    </table>
+    <p style="margin-top:1rem"><strong>Format:</strong> <code>xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx</code> where <code>y</code> is one of <code>8</code>, <code>9</code>, <code>a</code>, or <code>b</code>.</p>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-links">
+      <a href="../pages/about.html">About</a>
+      <a href="../pages/privacy.html">Privacy</a>
+      <a href="../pages/contact.html">Contact</a>
+    </div>
+    <p class="footer-copy">&copy; 2026 DevToolKit. All tools run locally in your browser.</p>
+  </div>
+</footer>
+
+<script>
+let uuids = [];
+
+function generate() {
+  const count = Math.min(1000, Math.max(1, parseInt(document.getElementById('uuid-count').value) || 1));
+  const upper = document.getElementById('uuid-uppercase').checked;
+  const noDashes = document.getElementById('uuid-no-dashes').checked;
+  
+  uuids = [];
+  for (let i = 0; i < count; i++) {
+    let uuid = crypto.randomUUID();
+    if (noDashes) uuid = uuid.replace(/-/g, '');
+    if (upper) uuid = uuid.toUpperCase();
+    uuids.push(uuid);
+  }
+  
+  const output = document.getElementById('uuid-output');
+  output.innerHTML = uuids.map((uuid, i) =>
+    `<div style="display:flex;align-items:center;gap:0.5rem"><span style="color:var(--text-secondary);font-size:0.75rem;min-width:2.5rem;text-align:right">${i+1}.</span> <span style="color:var(--green)">${uuid}</span> <button class="btn btn-sm" onclick="copyOne(${i})" style="padding:0.125rem 0.375rem;font-size:0.6875rem">📋</button></div>`
+  ).join('');
+  
+  document.getElementById('uuid-generated-count').textContent = count + ' UUIDs';
+}
+
+function copyOne(index) {
+  if (uuids[index]) { navigator.clipboard.writeText(uuids[index]); showToast('Copied UUID ' + (index+1)); }
+}
+
+function copyAll() {
+  if (uuids.length) { navigator.clipboard.writeText(uuids.join('\n')); showToast(`Copied ${uuids.length} UUIDs`); }
+}
+
+function clearAll() {
+  uuids = [];
+  document.getElementById('uuid-output').innerHTML = '<span style="color:var(--text-secondary)">Click "Generate" to create UUIDs.</span>';
+  document.getElementById('uuid-generated-count').textContent = '';
+}
+
+function showToast(msg) {
+  const t = document.createElement('div'); t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t); setTimeout(() => t.classList.add('show'), 10);
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2000);
+}
+
+generate();
+</script>
+</body>
+</html>
