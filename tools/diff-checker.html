@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diff Checker — Compare Text Differences Online | DevToolKit</title>
+  <meta name="description" content="Free online diff checker. Compare two texts side by side and see added, removed, and changed lines highlighted. No signup required, runs in your browser.">
+  <meta name="keywords" content="diff checker, text comparison, compare text, diff tool, online diff, text difference, code diff, file comparison">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/diff-checker.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="Diff Checker — DevToolKit">
+  <meta property="og:description" content="Compare two texts and see differences highlighted. Added, removed, changed lines.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"Diff Checker","url":"https://nordicnode.github.io/devtoolkit/tools/diff-checker.html","description":"Free online diff tool to compare text differences.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="../pages/cheatsheets.html">Cheat Sheets</a><a href="../pages/about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>Diff Checker</h1><p>Compare two texts and see the differences highlighted — added, removed, and changed lines.</p></div>
+  <div class="ad-container" id="ad-diff-top"></div>
+  <div class="tool-container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+      <div class="input-group" style="display:flex;flex-direction:column"><div class="group-header"><span>Original Text</span></div>
+      <textarea id="diff-a" style="flex:1;min-height:250px;resize:vertical" placeholder="Paste original text here...">function greet(name) {
+  console.log("Hello, " + name);
+  return true;
+}
+
+const users = ["Alice", "Bob"];
+users.forEach(greet);</textarea></div>
+      <div class="input-group" style="display:flex;flex-direction:column"><div class="group-header"><span>Modified Text</span></div>
+      <textarea id="diff-b" style="flex:1;min-height:250px;resize:vertical" placeholder="Paste modified text here...">function greet(name, greeting = "Hello") {
+  console.log(greeting + ", " + name + "!");
+  return true;
+}
+
+const users = ["Alice", "Bob", "Charlie"];
+users.forEach(user => greet(user));</textarea></div>
+    </div>
+    <div class="btn-row" style="margin-top:1rem">
+      <button class="btn btn-primary" onclick="compare()">🔍 Compare</button>
+      <button class="btn btn-success" onclick="copyResult()">📋 Copy Result</button>
+      <button class="btn btn-danger" onclick="clearAll()">✕ Clear</button>
+    </div>
+    <div class="status-bar" style="margin-top:1rem"><span id="diff-stats">Click "Compare" to see differences</span></div>
+    <div class="output-group" style="margin-top:1rem"><div class="group-header"><span>Diff Result</span></div>
+    <div id="diff-output" style="padding:0.875rem 1rem;font-family:var(--font-mono);font-size:0.8125rem;line-height:1.7;white-space:pre-wrap"></div></div>
+  </div>
+  <div class="ad-container" id="ad-diff-bottom"></div>
+  <section class="info-section">
+    <h2>How to Use the Diff Checker</h2>
+    <p>Paste your original text in the left field and the modified text in the right field. Click "Compare" to see the differences highlighted:</p>
+    <ul style="margin-top:0.5rem">
+      <li style="color:var(--red)">■ Red/removed lines — lines that exist in the original but not in the modified text</li>
+      <li style="color:var(--green)">■ Green/added lines — lines that exist in the modified text but not in the original</li>
+      <li style="color:var(--text-secondary)">■ Unchanged lines — lines that are the same in both texts</li>
+    </ul>
+    <p style="margin-top:0.75rem">Useful for reviewing code changes, comparing document revisions, checking configuration file diffs, and verifying edits before committing.</p>
+  </section>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="../pages/about.html">About</a><a href="../pages/privacy.html">Privacy</a><a href="../pages/contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+<script>
+function compare(){
+  const a=document.getElementById('diff-a').value.split('\n');
+  const b=document.getElementById('diff-b').value.split('\n');
+  const output=document.getElementById('diff-output');
+  const stats=document.getElementById('diff-stats');
+  let html='';let added=0,removed=0;
+  // Simple line-by-line diff using LCS approach (optimized for short texts)
+  const maxLen=Math.max(a.length,b.length);
+  for(let i=0;i<maxLen;i++){
+    const lineA=i<a.length?a[i]:undefined;
+    const lineB=i<b.length?b[i]:undefined;
+    if(lineA===lineB){html+=`<span style="color:var(--text-secondary)">${i+1}  ${esc(lineA??'')}</span>\n`}
+    else if(lineA!==undefined&&lineB!==undefined){html+=`<span style="color:var(--red);text-decoration:line-through">${i+1}- ${esc(lineA)}</span>\n`;html+=`<span style="color:var(--green)">${i+1}+ ${esc(lineB)}</span>\n`;added++;removed++}
+    else if(lineA!==undefined){html+=`<span style="color:var(--red);text-decoration:line-through">${i+1}- ${esc(lineA)}</span>\n`;removed++}
+    else{html+=`<span style="color:var(--green)">${i+1}+ ${esc(lineB)}</span>\n`;added++}
+  }
+  output.innerHTML=html;
+  stats.innerHTML=`<span style="color:var(--green)">+${added} added</span> · <span style="color:var(--red)">-${removed} removed</span> · ${maxLen} total lines`;
+}
+function esc(s){return s.replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>')}
+function copyResult(){const t=document.getElementById('diff-output').innerText;navigator.clipboard.writeText(t);const toast=document.createElement('div');toast.className='toast';toast.textContent='Copied';document.body.appendChild(toast);setTimeout(()=>toast.classList.add('show'),10);setTimeout(()=>{toast.classList.remove('show');setTimeout(()=>toast.remove(),300)},2000)}
+function clearAll(){document.getElementById('diff-a').value='';document.getElementById('diff-b').value='';document.getElementById('diff-output').innerHTML='';document.getElementById('diff-stats').textContent='Click "Compare" to see differences'}
+</script>
+</body>
+</html>

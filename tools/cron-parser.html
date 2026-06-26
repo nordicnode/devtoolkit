@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cron Expression Parser — Decode Cron Schedules | DevToolKit</title>
+  <meta name="description" content="Free online cron expression parser. Decode and explain cron schedule expressions. Shows next scheduled run times, human-readable descriptions, and supports standard and extended cron syntax.">
+  <meta name="keywords" content="cron expression parser, cron schedule, crontab checker, cron decoder, cron next run, cron human readable, schedule parser, cron validator">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/cron-parser.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="Cron Expression Parser — DevToolKit">
+  <meta property="og:description" content="Decode cron expressions into human-readable schedules with next run times.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"Cron Expression Parser","url":"https://nordicnode.github.io/devtoolkit/tools/cron-parser.html","description":"Free online cron expression parser and decoder.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="../pages/cheatsheets.html">Cheat Sheets</a><a href="../pages/about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>Cron Expression Parser</h1><p>Decode cron expressions into human-readable schedules and see the next 10 run times.</p></div>
+  <div class="ad-container" id="ad-cron-top"></div>
+  <div class="tool-container">
+    <div class="input-group"><div class="group-header"><span>Cron Expression</span><button class="btn btn-sm" onclick="loadSample()">📋 Sample</button></div>
+    <input type="text" id="cron-input" value="0 9 * * 1-5" placeholder="e.g. 0 9 * * 1-5" style="width:100%;padding:0.875rem 1rem;background:transparent;border:none;color:var(--text);font-family:var(--font-mono);font-size:1.125rem;outline:none" oninput="parse()"></div>
+    <div class="info-fields" style="display:grid;grid-template-columns:repeat(5,1fr);gap:0.5rem;margin-top:0.75rem">
+      <div class="hash-item"><div class="algo-name">Minute</div><div class="hash-value" id="f-min" style="font-size:0.9375rem">0</div></div>
+      <div class="hash-item"><div class="algo-name">Hour</div><div class="hash-value" id="f-hour" style="font-size:0.9375rem">9</div></div>
+      <div class="hash-item"><div class="algo-name">Day of Month</div><div class="hash-value" id="f-dom" style="font-size:0.9375rem">*</div></div>
+      <div class="hash-item"><div class="algo-name">Month</div><div class="hash-value" id="f-mon" style="font-size:0.9375rem">*</div></div>
+      <div class="hash-item"><div class="algo-name">Day of Week</div><div class="hash-value" id="f-dow" style="font-size:0.9375rem">1-5</div></div>
+    </div>
+    <div class="status-bar" style="margin-top:0.75rem"><span id="cron-desc" style="color:var(--green)">At 09:00, Monday through Friday</span></div>
+    <div class="hash-grid" style="margin-top:1rem" id="next-runs"></div>
+  </div>
+  <div class="ad-container" id="ad-cron-bottom"></div>
+  <section class="info-section">
+    <h2>Cron Expression Reference</h2>
+    <table class="cheat-table">
+      <tr><th>Field</th><th>Allowed Values</th><th>Special Characters</th></tr>
+      <tr><td>Minute</td><td>0-59</td><td>* , - /</td></tr>
+      <tr><td>Hour</td><td>0-23</td><td>* , - /</td></tr>
+      <tr><td>Day of Month</td><td>1-31</td><td>* , - / L W</td></tr>
+      <tr><td>Month</td><td>1-12 or JAN-DEC</td><td>* , - /</td></tr>
+      <tr><td>Day of Week</td><td>0-6 or SUN-SAT</td><td>* , - / L #</td></tr>
+    </table>
+    <h3 style="margin-top:1rem;font-size:1rem">Special Characters</h3>
+    <table class="cheat-table" style="margin-top:0.5rem">
+      <tr><th>Char</th><th>Meaning</th><th>Example</th></tr>
+      <tr><td>*</td><td>Any value</td><td>* * * * * = every minute</td></tr>
+      <tr><td>,</td><td>List separator</td><td>1,15 * * * * = at min 1 and 15</td></tr>
+      <tr><td>-</td><td>Range</td><td>1-5 * * * * = min 1 through 5</td></tr>
+      <tr><td>/</td><td>Step values</td><td>*/15 * * * * = every 15 min</td></tr>
+    </table>
+    <h3 style="margin-top:1rem;font-size:1rem">Common Expressions</h3>
+    <table class="cheat-table" style="margin-top:0.5rem">
+      <tr><th>Expression</th><th>Meaning</th></tr>
+      <tr><td>* * * * *</td><td>Every minute</td></tr>
+      <tr><td>0 * * * *</td><td>Every hour</td></tr>
+      <tr><td>0 9 * * *</td><td>Every day at 9:00 AM</td></tr>
+      <tr><td>0 9 * * 1-5</td><td>Weekdays at 9:00 AM</td></tr>
+      <tr><td>*/5 * * * *</td><td>Every 5 minutes</td></tr>
+      <tr><td>0 0 1 * *</td><td>First day of each month</td></tr>
+      <tr><td>0 0 * * 0</td><td>Every Sunday at midnight</td></tr>
+      <tr><td>0 6,18 * * *</td><td>Twice daily at 6:00 and 18:00</td></tr>
+    </table>
+  </section>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="../pages/about.html">About</a><a href="../pages/privacy.html">Privacy</a><a href="../pages/contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+<script>
+const DAY_NAMES=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const MONTH_NAMES=['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+function expandField(field,min,max){
+  if(field==='*')return Array.from({length:max-min+1},(_,i)=>min+i);
+  const vals=new Set();
+  field.split(',').forEach(part=>{
+    if(part.includes('/')){const[base,step]=part.split('/');const s=base==='*'?min:parseInt(base);for(let i=s;i<=max;i+=parseInt(step))vals.add(i)}
+    else if(part.includes('-')){const[a,b]=part.split('-').map(Number);for(let i=a;i<=b;i++)vals.add(i)}
+    else vals.add(parseInt(part));
+  });
+  return [...vals].sort((a,b)=>a-b);
+}
+
+function describeCron(parts){
+  const[min,hour,dom,mon,dow]=parts;
+  let desc='At ';
+  // Time
+  if(min!=='*'||hour!=='*'){const mins=expandField(min,0,59);const hours=expandField(hour,0,23);
+    if(mins.length>1||hours.length>1){desc+='specified times'}
+    else{desc+=String(hours[0]).padStart(2,'0')+':'+String(mins[0]).padStart(2,'0')}
+  }else desc+='every minute';
+  // Day of week
+  if(dow!=='*'){const days=expandField(dow,0,6);desc+=', '+days.map(d=>DAY_NAMES[d]).join(' through ')}
+  // Month
+  if(mon!=='*'){const months=expandField(mon,1,12);desc+=', in '+months.map(m=>MONTH_NAMES[m-1]).join(', ')}
+  // Day of month
+  if(dom!=='*'){desc+=', on day '+dom}
+  if(dow==='*'&&dom==='*'&&mon==='*')desc+=' every day';
+  return desc;
+}
+
+function getNextRuns(parts,count=10){
+  const[minField,hourField,domField,monField,dowField]=parts;
+  const mins=expandField(minField,0,59);const hours=expandField(hourField,0,23);
+  const doms=expandField(domField,1,31);const mons=expandField(monField,1,12);
+  const dows=expandField(dowField,0,6);
+  const runs=[];let d=new Date();
+  for(let i=0;i<count*500&&runs.length<count;i++){
+    d=new Date(d.getTime()+60000);d.setSeconds(0);d.setMilliseconds(0);
+    if(!mins.includes(d.getMinutes()))continue;
+    if(!hours.includes(d.getHours()))continue;
+    if(!doms.includes(d.getDate())&&domField!=='*')continue;
+    if(!mons.includes(d.getMonth()+1)&&monField!=='*')continue;
+    if(!dows.includes(d.getDay())&&dowField!=='*')continue;
+    runs.push(new Date(d));
+  }
+  return runs;
+}
+
+function parse(){
+  const expr=document.getElementById('cron-input').value.trim();
+  const desc=document.getElementById('cron-desc');
+  if(!expr){desc.textContent='Enter a cron expression';desc.className='';return}
+  const parts=expr.split(/\s+/);
+  if(parts.length<5){desc.textContent='Invalid — need 5 fields (min hour day month weekday)';desc.className='invalid';return}
+  try{
+    const fieldEls=['f-min','f-hour','f-dom','f-mon','f-dow'];
+    parts.slice(0,5).forEach((p,i)=>document.getElementById(fieldEls[i]).textContent=p);
+    desc.textContent=describeCron(parts.slice(0,5));
+    desc.className=desc.textContent?'valid':'';
+    const runs=getNextRuns(parts.slice(0,5),10);
+    document.getElementById('next-runs').innerHTML=runs.map((d,i)=>
+      `<div class="hash-item"><div class="algo-name">Run #${i+1}</div><div class="hash-value" style="cursor:pointer" onclick="navigator.clipboard.writeText('${d.toISOString()}');this.style.color='var(--accent)'">${d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'})} ${d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})}</div></div>`
+    ).join('');
+  }catch(e){desc.textContent='Error: '+e.message;desc.className='invalid'}
+}
+function loadSample(){document.getElementById('cron-input').value='*/15 9-17 * * 1-5';parse()}
+parse();
+</script>
+</body>
+</html>
