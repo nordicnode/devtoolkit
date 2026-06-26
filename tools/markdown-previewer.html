@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Previewer — Live Markdown to HTML Converter | DevToolKit</title>
+  <meta name="description" content="Free online Markdown previewer. Write Markdown and see the rendered HTML output in real-time. Supports tables, code blocks, links, images, and more.">
+  <meta name="keywords" content="Markdown previewer, Markdown to HTML, live Markdown editor, Markdown renderer, online Markdown tool, Markdown converter">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/markdown-previewer.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="Markdown Previewer — DevToolKit">
+  <meta property="og:description" content="Write Markdown and see live HTML preview. Supports tables, code, links.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"Markdown Previewer","url":"https://nordicnode.github.io/devtoolkit/tools/markdown-previewer.html","description":"Free online Markdown previewer with real-time rendering.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="../pages/cheatsheets.html">Cheat Sheets</a><a href="../pages/about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>Markdown Previewer</h1><p>Write Markdown on the left, see the rendered HTML on the right — in real-time.</p></div>
+  <div class="ad-container" id="ad-md-top"></div>
+  <div class="tool-container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;min-height:400px">
+      <div class="input-group" style="display:flex;flex-direction:column">
+        <div class="group-header"><span>Markdown Input</span><button class="btn btn-sm" onclick="loadSample()">📋 Sample</button></div>
+        <textarea id="md-input" style="flex:1;min-height:350px;resize:none" placeholder="Type Markdown here..."># Hello World
+
+This is a **Markdown** previewer.
+
+## Features
+- Bold and *italic* text
+- `inline code`
+- [Links](https://example.com)
+
+```js
+console.log("Hello!");
+```
+
+| Tool | Type |
+|------|------|
+| Regex | Text |
+| JSON | Data |
+
+> This is a blockquote
+
+---
+
+1. First item
+2. Second item
+3. Third item</textarea>
+      </div>
+      <div class="output-group" style="display:flex;flex-direction:column">
+        <div class="group-header"><span>Rendered Preview</span><button class="btn btn-sm" onclick="copyHtml()">📋 Copy HTML</button></div>
+        <div id="md-output" style="flex:1;padding:0.875rem 1rem;overflow:auto;min-height:350px;color:var(--text);font-size:0.9375rem;line-height:1.7"></div>
+      </div>
+    </div>
+  </div>
+  <div class="ad-container" id="ad-md-bottom"></div>
+  <section class="info-section">
+    <h2>Markdown Quick Reference</h2>
+    <table class="cheat-table">
+      <tr><th>Markdown</th><th>Result</th></tr>
+      <tr><td>**bold**</td><td><strong>bold</strong></td></tr>
+      <tr><td>*italic*</td><td><em>italic</em></td></tr>
+      <tr><td>`code`</td><td>inline code</td></tr>
+      <tr><td>[link](url)</td><td>hyperlink</td></tr>
+      <tr><td>![alt](url)</td><td>image</td></tr>
+      <tr><td># Heading 1</td><td>h1 heading</td></tr>
+      <tr><td>## Heading 2</td><td>h2 heading</td></tr>
+      <tr><td>- item</td><td>unordered list</td></tr>
+      <tr><td>1. item</td><td>ordered list</td></tr>
+      <tr><td>> quote</td><td>blockquote</td></tr>
+      <tr><td>---</td><td>horizontal rule</td></tr>
+    </table>
+  </section>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="../pages/about.html">About</a><a href="../pages/privacy.html">Privacy</a><a href="../pages/contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+<script>
+function renderMd(md){
+  let html=md
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h2>$1</h2>')
+    .replace(/^# (.+)$/gm,'<h1>$1</h1>')
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.+?)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code style="background:var(--bg-tertiary);padding:0.125em 0.375em;border-radius:4px;font-family:var(--font-mono);font-size:0.85em">$1</code>')
+    .replace(/^> (.+)$/gm,'<blockquote style="border-left:3px solid var(--accent);padding-left:1rem;color:var(--text-secondary);margin:0.5rem 0">$1</blockquote>')
+    .replace(/^---$/gm,'<hr style="border:none;border-top:1px solid var(--border);margin:1rem 0">')
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,'<img src="$2" alt="$1" style="max-width:100%;border-radius:var(--radius)">')
+    .replace(/^(\d+)\. (.+)$/gm,'<li style="margin-left:1.25rem;list-style:decimal">$2</li>')
+    .replace(/^- (.+)$/gm,'<li style="margin-left:1.25rem;list-style:disc">$1</li>')
+    .replace(/^(\|.+\|)$/gm,m=>{const cells=m.split('|').filter(c=>c.trim());if(cells.every(c=>/^[-:]+$/.test(c.trim())))return'';return'<tr>'+cells.map(c=>'<td style="border:1px solid var(--border);padding:0.375rem 0.75rem;color:var(--text-secondary)">'+c.trim()+'</td>').join('')+'</tr>'})
+    .replace(/```(\w*)\n([\s\S]*?)```/g,'<pre style="background:var(--bg-tertiary);border:1px solid var(--border);border-radius:var(--radius);padding:0.75rem 1rem;overflow-x:auto;font-family:var(--font-mono);font-size:0.8125rem;margin:0.5rem 0"><code>$2</code></pre>')
+    .replace(/\n{2,}/g,'<br><br>')
+    .replace(/\n/g,'<br>');
+  // Wrap table rows
+  if(html.includes('<tr>'))html=html.replace(/((?:<tr>.*?<\/tr>\s*)+)/g,'<table style="border-collapse:collapse;margin:0.5rem 0;width:100%;font-size:0.875rem">$1</table>');
+  return html;
+}
+const mdIn=document.getElementById('md-input'),mdOut=document.getElementById('md-output');
+function update(){mdOut.innerHTML=renderMd(mdIn.value)}
+mdIn.addEventListener('input',update);
+function loadSample(){mdIn.value='# DevToolKit\n\nA collection of **free** developer tools.\n\n## Features\n\n- Regex Tester\n- JSON Formatter\n- Base64 Encoder\n- Hash Calculator\n\n```javascript\nconst tools = Object.keys(devToolkit);\nconsole.log(`${tools.length} tools available`);\n```\n\n| Tool | Category |\n|------|----------|\n| Regex | Text |\n| JSON | Data |\n| Base64 | Encoding |\n\n> All tools run in your browser. No data sent to servers.\n\n---\n\nVisit [DevToolKit](https://nordicnode.github.io/devtoolkit/) for more.';update()}
+function copyHtml(){navigator.clipboard.writeText(mdOut.innerHTML);const t=document.createElement('div');t.className='toast';t.textContent='HTML copied';document.body.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},2000)}
+update();
+</script>
+</body>
+</html>

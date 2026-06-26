@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How to Validate JSON — A Complete Guide | DevToolKit</title>
+  <meta name="description" content="Learn how to validate JSON data effectively. Covers syntax rules, common errors, validation tools, and programmatic validation in JavaScript, Python, and more.">
+  <meta name="keywords" content="JSON validation, validate JSON, JSON syntax, JSON errors, JSON parser, JSON lint, JSON checker">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/pages/json-validation-guide.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="How to Validate JSON — DevToolKit">
+  <meta property="og:description" content="Complete guide to JSON validation: syntax rules, common errors, and programmatic methods.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","name":"How to Validate JSON","url":"https://nordicnode.github.io/devtoolkit/pages/json-validation-guide.html","description":"A complete guide to validating JSON data with syntax rules, common errors, and code examples."}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="cheatsheets.html">Cheat Sheets</a><a href="about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>How to Validate JSON — A Complete Guide</h1><p>Everything you need to know about validating JSON data, from syntax rules to programmatic validation.</p></div>
+  <div class="ad-container" id="ad-json-guide-top"></div>
+  <div class="info-section">
+    <h2>What is JSON Validation?</h2>
+    <p>JSON validation is the process of checking whether a string of text conforms to the JSON (JavaScript Object Notation) syntax specification. Valid JSON can be parsed into a native data structure by any compliant parser. Invalid JSON will throw a parse error.</p>
+    <p style="margin-top:0.75rem">Validation is critical when consuming APIs, reading configuration files, or processing user input — malformed JSON causes runtime errors, silent failures, and hard-to-debug issues.</p>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>JSON Syntax Rules</h2>
+    <p>JSON has a strict syntax. Here are the rules that must be followed:</p>
+    <table class="cheat-table" style="margin-top:0.75rem">
+      <tr><th>Rule</th><th>Correct</th><th>Incorrect</th></tr>
+      <tr><td>Keys must be quoted</td><td><code>"name": "Alice"</code></td><td><code>name: "Alice"</code></td></tr>
+      <tr><td>Strings use double quotes</td><td><code>"hello"</code></td><td><code>'hello'</code></td></tr>
+      <tr><td>No trailing commas</td><td><code>[1, 2, 3]</code></td><td><code>[1, 2, 3,]</code></td></tr>
+      <tr><td>Comments not allowed</td><td>N/A (use JSONC or JSON5)</td><td><code>// comment</code></td></tr>
+      <tr><td>Strings for keys and string values</td><td><code>"count": 5</code></td><td><code>count: 0x5</code></td></tr>
+      <tr><td>Proper escaping in strings</td><td><code>"path\\to\\file"</code></td><td><code>"path\to\file"</code></td></tr>
+    </table>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>Common JSON Validation Errors</h2>
+    <p>These are the most frequent errors developers encounter when writing or generating JSON:</p>
+    <table class="cheat-table" style="margin-top:0.75rem">
+      <tr><th>Error</th><th>Cause</th><th>Fix</th></tr>
+      <tr><td>Unexpected token</td><td>Unquoted key or single-quoted string</td><td>Use double quotes for all keys and string values</td></tr>
+      <tr><td>Unexpected trailing comma</td><td>Comma after the last item in an object or array</td><td>Remove the trailing comma</td></tr>
+      <tr><td>Unexpected end of input</td><td>Missing closing bracket or brace</td><td>Match all opening and closing delimiters</td></tr>
+      <tr><td>Bad control character</td><td>Unescaped newline or tab in a string</td><td>Escape with <code>\\n</code> or <code>\\t</code></td></tr>
+      <tr><td>Bad string</td><td>Invalid escape sequence like <code>\\x</code></td><td>Only use valid escape sequences: <code>\\\"</code>, <code>\\\\</code>, <code>\\\/</code>, <code>\\b</code>, <code>\\f</code>, <code>\\n</code>, <code>\\r</code>, <code>\\t</code>, <code>\\uXXXX</code></td></tr>
+    </table>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>Programmatic Validation</h2>
+    <h3 style="margin-top:0.75rem;font-size:1rem">JavaScript / Node.js</h3>
+    <table class="cheat-table" style="margin-top:0.5rem">
+      <tr><th>Method</th><th>Code</th></tr>
+      <tr><td>Basic parse</td><td><code>JSON.parse(text)</code> — throws on invalid JSON</td></tr>
+      <tr><td>Safe parse</td><td><code>try { JSON.parse(text) } catch(e) { /* handle */ }</code></td></tr>
+      <tr><td>Schema validation</td><td>Use <code>ajv</code> npm package for JSON Schema validation</td></tr>
+    </table>
+    <h3 style="margin-top:1rem;font-size:1rem">Python</h3>
+    <table class="cheat-table" style="margin-top:0.5rem">
+      <tr><th>Method</th><th>Code</th></tr>
+      <tr><td>Basic parse</td><td><code>json.loads(text)</code> — raises json.JSONDecodeError</td></tr>
+      <tr><td>Safe parse</td><td><code>try: json.loads(text)\nexcept json.JSONDecodeError as e:\n    print(f"Line {e.lineno}, Col {e.colno}")</code></td></tr>
+      <tr><td>Schema validation</td><td>Use <code>jsonschema</code> pip package</td></tr>
+    </table>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>Validate JSON Online</h2>
+    <p>Need to quickly validate a JSON string? Use our free <a href="../tools/json-formatter.html">JSON Formatter tool</a> — paste your JSON and it instantly checks syntax, reports errors with line numbers, and shows file size, key count, and nesting depth.</p>
+  </div>
+  <div class="ad-container" id="ad-json-guide-bottom"></div>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+</body>
+</html>

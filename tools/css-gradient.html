@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Gradient Generator — Create Beautiful CSS Gradients | DevToolKit</title>
+  <meta name="description" content="Free online CSS gradient generator. Create linear and radial gradients with multiple color stops, live preview, and copy-ready CSS code.">
+  <meta name="keywords" content="CSS gradient generator, CSS gradient, linear gradient, radial gradient, CSS background, gradient maker, gradient creator">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/css-gradient.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="CSS Gradient Generator — DevToolKit">
+  <meta property="og:description" content="Create beautiful CSS gradients with live preview and copy-ready code.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"CSS Gradient Generator","url":"https://nordicnode.github.io/devtoolkit/tools/css-gradient.html","description":"Free online CSS gradient generator with live preview.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="../pages/cheatsheets.html">Cheat Sheets</a><a href="../pages/about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>CSS Gradient Generator</h1><p>Create beautiful linear and radial gradients with live preview and copy-ready CSS.</p></div>
+  <div class="ad-container" id="ad-grad-top"></div>
+  <div class="tool-container">
+    <div id="gradient-preview" style="width:100%;height:200px;border-radius:var(--radius);border:1px solid var(--border);margin-bottom:1rem;background:linear-gradient(90deg,#58a6ff,#3fb950)"></div>
+    <div class="btn-row" style="margin-bottom:1rem">
+      <label style="font-size:0.875rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.5rem">Type:
+        <select id="grad-type" style="background:var(--bg-tertiary);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);padding:0.375rem 0.625rem;font-size:0.875rem" onchange="update()">
+          <option value="linear">Linear</option>
+          <option value="radial">Radial</option>
+        </select>
+      </label>
+      <label style="font-size:0.875rem;color:var(--text-secondary);display:flex;align-items:center;gap:0.5rem">Angle:
+        <input type="range" id="grad-angle" min="0" max="360" value="90" oninput="update()" style="width:100px"><span id="grad-angle-val">90°</span>
+      </label>
+    </div>
+    <div style="margin-bottom:1rem">
+      <div class="group-header" style="margin-bottom:0.5rem"><span>Color Stops</span><button class="btn btn-sm" onclick="addStop()">+ Add Stop</button></div>
+      <div id="color-stops">
+        <div class="stop-row" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.375rem"><input type="color" value="#58a6ff" class="stop-color" onchange="update()" style="width:40px;height:32px;border:none;cursor:pointer;border-radius:4px"><input type="range" min="0" max="100" value="0" class="stop-pos" oninput="update()" style="flex:1"><span class="stop-pos-val" style="font-family:var(--font-mono);font-size:0.8125rem;width:3rem">0%</span><button class="btn btn-sm btn-danger" onclick="removeStop(this)" style="padding:0.125rem 0.375rem">✕</button></div>
+        <div class="stop-row" style="display:flex;gap:0.5rem;align-items:center;margin-bottom:0.375rem"><input type="color" value="#3fb950" class="stop-color" onchange="update()" style="width:40px;height:32px;border:none;cursor:pointer;border-radius:4px"><input type="range" min="0" max="100" value="100" class="stop-pos" oninput="update()" style="flex:1"><span class="stop-pos-val" style="font-family:var(--font-mono);font-size:0.8125rem;width:3rem">100%</span><button class="btn btn-sm btn-danger" onclick="removeStop(this)" style="padding:0.125rem 0.375rem">✕</button></div>
+      </div>
+    </div>
+    <div class="output-group"><div class="group-header"><span>CSS Code</span><button class="btn btn-sm btn-success" onclick="copyCSS()">📋 Copy CSS</button></div><div id="css-output" class="output-area" style="font-size:0.9375rem">background: linear-gradient(90deg, #58a6ff 0%, #3fb950 100%);</div></div>
+  </div>
+  <div class="ad-container" id="ad-grad-bottom"></div>
+  <section class="info-section">
+    <h2>CSS Gradient Tips</h2>
+    <ul>
+      <li><strong>Linear gradients</strong> flow in a direction (0° = top, 90° = right, 180° = bottom).</li>
+      <li><strong>Radial gradients</strong> radiate from a center point outward.</li>
+      <li>Add 3-5 color stops for the smoothest visual transitions.</li>
+      <li>Use <code>transparent</code> as a stop color for fade effects.</li>
+      <li>Gradients work great as <code>background-image</code> overlays on hero sections and cards.</li>
+    </ul>
+  </section>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="../pages/about.html">About</a><a href="../pages/privacy.html">Privacy</a><a href="../pages/contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+<script>
+function update(){
+  const type=document.getElementById('grad-type').value;
+  const angle=document.getElementById('grad-angle').value;
+  document.getElementById('grad-angle-val').textContent=angle+'°';
+  const rows=document.querySelectorAll('.stop-row');
+  const stops=[];
+  rows.forEach(r=>{const c=r.querySelector('.stop-color').value;const p=r.querySelector('.stop-pos').value;r.querySelector('.stop-pos-val').textContent=p+'%';stops.push(`${c} ${p}%`)});
+  const css=type==='linear'?`linear-gradient(${angle}deg, ${stops.join(', ')})`:`radial-gradient(circle, ${stops.join(', ')})`;
+  document.getElementById('gradient-preview').style.background=css;
+  document.getElementById('css-output').textContent=`background: ${css};`;
+}
+function addStop(){
+  const div=document.createElement('div');div.className='stop-row';div.style.cssText='display:flex;gap:0.5rem;align-items:center;margin-bottom:0.375rem';
+  const last=document.querySelectorAll('.stop-row').length;const pos=Math.min(100,last*30);
+  div.innerHTML=`<input type="color" value="#d29922" class="stop-color" onchange="update()" style="width:40px;height:32px;border:none;cursor:pointer;border-radius:4px"><input type="range" min="0" max="100" value="${pos}" class="stop-pos" oninput="update()" style="flex:1"><span class="stop-pos-val" style="font-family:var(--font-mono);font-size:0.8125rem;width:3rem">${pos}%</span><button class="btn btn-sm btn-danger" onclick="removeStop(this)" style="padding:0.125rem 0.375rem">✕</button>`;
+  document.getElementById('color-stops').appendChild(div);update();
+}
+function removeStop(btn){if(document.querySelectorAll('.stop-row').length>2){btn.closest('.stop-row').remove();update()}}
+function copyCSS(){navigator.clipboard.writeText(document.getElementById('css-output').textContent);const t=document.createElement('div');t.className='toast';t.textContent='CSS copied';document.body.appendChild(t);setTimeout(()=>t.classList.add('show'),10);setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},2000)}
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Understanding JWT Structure — A Developer's Guide | DevToolKit</title>
+  <meta name="description" content="Learn how JSON Web Tokens (JWT) work. Understand the header, payload, and signature structure, common claims, security considerations, and when to use JWTs.">
+  <meta name="keywords" content="JWT structure, JSON Web Token, JWT explained, JWT header payload signature, JWT claims, JWT security, JWT authentication">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/pages/jwt-guide.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="Understanding JWT Structure — DevToolKit">
+  <meta property="og:description" content="Developer's guide to JWT: header, payload, signature, claims, and security.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","name":"Understanding JWT Structure","url":"https://nordicnode.github.io/devtoolkit/pages/jwt-guide.html","description":"A developer's guide to understanding JSON Web Token structure, claims, and security."}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="cheatsheets.html">Cheat Sheets</a><a href="about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>Understanding JWT Structure — A Developer's Guide</h1><p>A practical deep-dive into how JSON Web Tokens work, what each part contains, and how to use them safely.</p></div>
+  <div class="ad-container" id="ad-jwt-guide-top"></div>
+  <div class="info-section">
+    <h2>What is a JWT?</h2>
+    <p>A JSON Web Token (JWT, pronounced "jot") is a compact, URL-safe way to represent claims between two parties. A JWT encodes a set of claims as a JSON object that is used as the payload of a JSON Web Signature (JWS) or JSON Web Encryption (JWE) structure.</p>
+    <p style="margin-top:0.75rem">JWTs are commonly used for <strong>authentication</strong> (proving identity) and <strong>authorization</strong> (proving permissions). They're sent in HTTP headers, stored in cookies, or passed as URL parameters.</p>
+    <p style="margin-top:0.75rem">A JWT looks like this: <code>xxxxx.yyyyy.zzzzz</code> — three Base64URL-encoded strings separated by dots.</p>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>The Three Parts</h2>
+    <h3 style="margin-top:0.75rem;font-size:1rem">1. Header</h3>
+    <p>The header typically consists of two parts: the token type (<code>typ</code>) and the signing algorithm (<code>alg</code>).</p>
+    <pre style="background:var(--bg-tertiary);border:1px solid var(--border);border-radius:var(--radius);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.8125rem;margin:0.5rem 0;overflow-x:auto">{
+  "alg": "HS256",
+  "typ": "JWT"
+}</pre>
+    <p>Common algorithms: <code>HS256</code> (HMAC + SHA-256), <code>RS256</code> (RSA + SHA-256), <code>ES256</code> (ECDSA + SHA-256).</p>
+
+    <h3 style="margin-top:1.25rem;font-size:1rem">2. Payload</h3>
+    <p>The payload contains the <strong>claims</strong> — statements about an entity (typically a user) and additional data. Claims come in three types:</p>
+    <table class="cheat-table" style="margin-top:0.5rem">
+      <tr><th>Type</th><th>Examples</th><th>Description</th></tr>
+      <tr><td>Registered</td><td>iss, sub, aud, exp, iat</td><td>Predefined claim names with specific semantics</td></tr>
+      <tr><td>Public</td><td>name, email, role</td><td>Registered in the IANA JWT registry or collison-resistant</td></tr>
+      <tr><td>Private</td><td>app-specific fields</td><td>Custom claims agreed upon by the parties</td></tr>
+    </table>
+
+    <h3 style="margin-top:1.25rem;font-size:1rem">3. Signature</h3>
+    <p>The signature is used to verify the token hasn't been tampered with. It's computed from the encoded header, encoded payload, and a secret (for HMAC) or private key (for RSA/ECDSA):</p>
+    <pre style="background:var(--bg-tertiary);border:1px solid var(--border);border-radius:var(--radius);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.8125rem;margin:0.5rem 0;overflow-x:auto">HMACSHA256(base64UrlEncode(header) + "." + base64UrlEncode(payload), secret)</pre>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>Security Considerations</h2>
+    <ul>
+      <li><strong>Never store sensitive data in a JWT payload</strong> — it's Base64-encoded, not encrypted. Anyone can decode it.</li>
+      <li><strong>Always verify the signature server-side</strong> — decoding alone doesn't prove authenticity.</li>
+      <li><strong>Set short expiration times</strong> — use the <code>exp</code> claim. 15 minutes for access tokens, 7 days for refresh tokens.</li>
+      <li><strong>Don't accept <code>alg: none</code></strong> — this attack removes the signature. Your server must enforce the expected algorithm.</li>
+      <li><strong>Use HTTPS</strong> — JWTs sent over HTTP can be intercepted.</li>
+      <li><strong>Consider token revocation</strong> — JWTs are stateless by design. Implement a blacklist or short expiry if you need revocation.</li>
+    </ul>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>Decode a JWT Right Now</h2>
+    <p>Want to inspect a JWT token? Use our free <a href="../tools/jwt-decoder.html">JWT Decoder tool</a> — paste any JWT and instantly see the decoded header, payload, claims, and expiration status.</p>
+  </div>
+  <div class="ad-container" id="ad-jwt-guide-bottom"></div>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+</body>
+</html>

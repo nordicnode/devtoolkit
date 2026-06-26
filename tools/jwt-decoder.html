@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JWT Decoder — Decode & Inspect JSON Web Tokens | DevToolKit</title>
+  <meta name="description" content="Free online JWT decoder. Decode JSON Web Tokens (JWT) to inspect header, payload, and signature. View expiration, issuer, claims, and more.">
+  <meta name="keywords" content="JWT decoder, JSON Web Token, decode JWT, inspect JWT, JWT claims, JWT expiration, JWT validator, token decoder">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/tools/jwt-decoder.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="JWT Decoder — DevToolKit">
+  <meta property="og:description" content="Decode and inspect JSON Web Tokens. View header, payload, and claims.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"WebApplication","name":"JWT Decoder","url":"https://nordicnode.github.io/devtoolkit/tools/jwt-decoder.html","description":"Free online JWT decoder to inspect headers, payloads, and claims.","applicationCategory":"DeveloperApplication","operatingSystem":"Any","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="../pages/cheatsheets.html">Cheat Sheets</a><a href="../pages/about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>JWT Decoder</h1><p>Decode JSON Web Tokens to inspect header, payload, and claims. Detects expiration and common issues.</p></div>
+  <div class="ad-container" id="ad-jwt-top"></div>
+  <div class="tool-container">
+    <div class="input-group"><div class="group-header"><span>JWT Token</span><button class="btn btn-sm" onclick="loadSample()">📋 Sample</button></div>
+    <textarea id="jwt-input" placeholder="Paste your JWT token here (eyJhbGci...)..." style="min-height:100px"></textarea></div>
+    <div class="btn-row"><button class="btn btn-primary" onclick="decode()">🔓 Decode</button><button class="btn btn-danger" onclick="clearAll()">✕ Clear</button></div>
+    <div class="status-bar" id="jwt-status"><span id="jwt-valid">Paste a JWT to decode</span></div>
+    <div class="hash-grid">
+      <div class="hash-item" style="grid-column:1/-1"><div class="algo-name">Header (Algorithm & Token Type)</div><div class="hash-value" id="jwt-header" style="white-space:pre-wrap;font-size:0.8125rem">—</div></div>
+      <div class="hash-item" style="grid-column:1/-1"><div class="algo-name">Payload (Claims & Data)</div><div class="hash-value" id="jwt-payload" style="white-space:pre-wrap;font-size:0.8125rem">—</div></div>
+      <div class="hash-item"><div class="algo-name">Signature</div><div class="hash-value" id="jwt-sig" style="word-break:break-all">—</div></div>
+      <div class="hash-item"><div class="algo-name">Token Info</div><div class="hash-value" id="jwt-info" style="white-space:pre-wrap;font-size:0.8125rem">—</div></div>
+    </div>
+  </div>
+  <div class="ad-container" id="ad-jwt-bottom"></div>
+  <section class="info-section">
+    <h2>Understanding JWT Structure</h2>
+    <p>A JSON Web Token consists of three Base64URL-encoded parts separated by dots: <code>header.payload.signature</code></p>
+    <table class="cheat-table" style="margin-top:1rem">
+      <tr><th>Part</th><th>Contains</th><th>Common Fields</th></tr>
+      <tr><td>Header</td><td>Algorithm & token type</td><td>alg, typ</td></tr>
+      <tr><td>Payload</td><td>Claims (data)</td><td>iss, sub, aud, exp, nbf, iat, jti</td></tr>
+      <tr><td>Signature</td><td>Verification hash</td><td>HMAC-SHA256, RSA, ECDSA</td></tr>
+    </table>
+    <p style="margin-top:1rem"><strong>Common Claims:</strong></p>
+    <ul>
+      <li><code>iss</code> — Issuer: who issued the token</li>
+      <li><code>sub</code> — Subject: who the token is about</li>
+      <li><code>aud</code> — Audience: intended recipient</li>
+      <li><code>exp</code> — Expiration: when the token expires (Unix timestamp)</li>
+      <li><code>iat</code> — Issued At: when the token was created (Unix timestamp)</li>
+      <li><code>nbf</code> — Not Before: when the token becomes valid</li>
+    </ul>
+    <p style="margin-top:0.75rem"><strong>Security Note:</strong> This tool only <em>decodes</em> JWTs — it does not verify signatures. Anyone can create a JWT with any claims. Always verify the signature server-side using your secret key before trusting claims.</p>
+  </section>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="../pages/about.html">About</a><a href="../pages/privacy.html">Privacy</a><a href="../pages/contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+<script>
+function b64urlDecode(str){str=str.replace(/-/g,'+').replace(/_/g,'/');while(str.length%4)str+='=';try{return JSON.parse(atob(str))}catch{return atob(str)}}
+function formatUnix(ts){if(!ts)return'N/A';const d=new Date(ts*1000);return isNaN(d)?'Invalid':d.toISOString()+' ('+(Date.now()/1000>ts?'EXPIRED':'valid')+')'}
+function decode(){const token=document.getElementById('jwt-input').value.trim();const status=document.getElementById('jwt-valid');if(!token){status.textContent='Paste a JWT to decode';status.className='';return}
+const parts=token.split('.');if(parts.length!==3){status.textContent='Invalid JWT — must have 3 dot-separated parts';status.className='invalid';return}
+try{const header=b64urlDecode(parts[0]);const payload=b64urlDecode(parts[1]);document.getElementById('jwt-header').textContent=JSON.stringify(header,null,2);document.getElementById('jwt-payload').textContent=JSON.stringify(payload,null,2);document.getElementById('jwt-sig').textContent=parts[2];
+let info=`Algorithm: ${header.alg||'unknown'}\nType: ${header.typ||'JWT'}`;if(payload.exp)info+=`\nExpires: ${formatUnix(payload.exp)}`;if(payload.iat)info+=`\nIssued: ${formatUnix(payload.iat)}`;if(payload.iss)info+=`\nIssuer: ${payload.iss}`;if(payload.sub)info+=`\nSubject: ${payload.sub}`;document.getElementById('jwt-info').textContent=info;
+const isExpired=payload.exp&&(Date.now()/1000>payload.exp);status.textContent=isExpired?'⚠ Token is EXPIRED':'✓ Token decoded successfully';status.className=isExpired?'invalid':'valid'}catch(e){status.textContent='Error: '+e.message;status.className='invalid'}}
+function loadSample(){document.getElementById('jwt-input').value='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkRldlRvb2xLaXQgVXNlciIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoxNzUwODk2MDAwLCJpc3MiOiJkZXZ0b29sa2l0LmlvIiwiYXVkIjoiZGV2ZWxvcGVycyJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c';decode()}
+function clearAll(){document.getElementById('jwt-input').value='';['jwt-header','jwt-payload','jwt-sig','jwt-info'].forEach(id=>document.getElementById(id).textContent='—');document.getElementById('jwt-valid').textContent='Paste a JWT to decode';document.getElementById('jwt-valid').className=''}
+</script>
+</body>
+</html>
