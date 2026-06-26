@@ -3,7 +3,7 @@
   "repo": "nordicnode/devtoolkit",
   "local_path": "C:/Users/Mikey/Desktop/Dev/devtoolkit-site",
   "created": "2026-06-25",
-  "last_updated": "2026-06-26T17:00:00Z",
+  "last_updated": "2026-06-26T18:00:00Z",
   "pages": {
     "tools": 15,
     "guides": 6,
@@ -56,6 +56,11 @@
       "date": "2026-06-26",
       "action": "email_fix",
       "details": "Fixed himalaya aliases. Gmail sending works."
+    },
+    {
+      "date": "2026-06-26",
+      "action": "devto_article_published",
+      "details": "5 Free Developer Tools That Run Entirely in Your Browser - https://dev.to/nordicnode/5-free-developer-tools-that-run-entirely-in-your-browser-3j6p"
     }
   ],
   "directories": {
@@ -89,7 +94,15 @@
   },
   "social_posts": {
     "platforms_tried": [],
-    "completed": []
+    "completed": [
+      {
+        "date": "2026-06-26",
+        "platform": "dev.to",
+        "article_id": 4000082,
+        "title": "5 Free Developer Tools That Run Entirely in Your Browser",
+        "url": "https://dev.to/nordicnode/5-free-developer-tools-that-run-entirely-in-your-browser-3j6p"
+      }
+    ]
   },
   "backlinks": {
     "acquired": [],
@@ -114,7 +127,8 @@
     "devto": {
       "username": "nordicnode",
       "auth": "gmail_oauth",
-      "status": "active"
+      "status": "active",
+      "api_access": "working"
     },
     "twitter": {
       "handle": "@nordicnode247",
