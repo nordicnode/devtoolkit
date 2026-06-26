@@ -1,0 +1,46 @@
+{
+  "site": "https://nordicnode.github.io/devtoolkit/",
+  "repo": "nordicnode/devtoolkit",
+  "local_path": "C:\Users\Mikey\Desktop\Dev\devtoolkit-site",
+  "created": "2026-06-25",
+  "last_updated": "2026-06-26T04:30:00Z",
+  "pages": { "tools": 15, "guides": 6, "info": 4, "total": 25 },
+  "monetization": {
+    "adsense_status": "not_applied",
+    "carbon_status": "applied",
+    "affiliate_status": "pending"
+  },
+  "seo": {
+    "search_console": "not_connected",
+    "sitemap_submitted": ["google", "bing"],
+    "last_lighthouse_check": null,
+    "broken_links_found": [],
+    "broken_links_fixed": []
+  },
+  "content_log": [
+    {"date": "2026-06-25", "action": "initial_launch", "details": "9 tools + 4 pages launched"},
+    {"date": "2026-06-26", "action": "tools_added", "details": "JWT decoder, Markdown previewer, CSS gradient, Number base converter"},
+    {"date": "2026-06-26", "action": "guides_added", "details": "JSON validation, JWT structure, HTTP codes, Regex beginners, Base64 encoding"},
+    {"date": "2026-06-26", "action": "tools_added", "details": "Cron parser, Diff checker"}
+  ],
+  "directories": {
+    "submitted": [],
+    "failed": [],
+    "pending": ["devhunt.co", "saashub.com", "alternativeto.net", "producthunt.com", "free-for.dev", "devrove.com", "ossinsight.io", "launched.bz", "startupbase.io", "betapage.co", "devutils.co", "toolify.xyz"]
+  },
+  "emails_sent": {
+    "applications": [
+      {"date": "2026-06-25", "to": "publishers@carbonads.net", "subject": "Publisher Application", "status": "sent"}
+    ],
+    "outreach": []
+  },
+  "social_posts": {
+    "platforms_tried": [],
+    "completed": []
+  },
+  "backlinks": {
+    "acquired": [],
+    "attempted": []
+  },
+  "competitors_monitored": []
+}
