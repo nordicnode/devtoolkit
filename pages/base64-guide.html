@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Understanding Base64 Encoding — When, Why, and How | DevToolKit</title>
+  <meta name="description" content="Deep dive into Base64 encoding: how it works, when to use it, when not to use it, and common pitfalls. Covers standard vs URL-safe Base64, MIME, and performance considerations.">
+  <meta name="keywords" content="Base64 encoding, how Base64 works, when to use Base64, URL-safe Base64, Base64 vs binary, data URLs, email attachments Base64">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/pages/base64-guide.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="Understanding Base64 Encoding — DevToolKit">
+  <meta property="og:description" content="How Base64 works, when to use it, and common pitfalls.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","name":"Understanding Base64 Encoding","url":"https://nordicnode.github.io/devtoolkit/pages/base64-guide.html","description":"A comprehensive guide to Base64 encoding with practical use cases and performance considerations."}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="cheatsheets.html">Cheat Sheets</a><a href="about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>Understanding Base64 Encoding</h1><p>How it works, when to use it, when not to, and the gotchas that trip people up.</p></div>
+  <div class="ad-container" id="ad-b64-guide-top"></div>
+  <div class="info-section">
+    <h2>What Is Base64?</h2>
+    <p>Base64 is a binary-to-text encoding scheme that converts binary data into a sequence of printable ASCII characters. It uses 64 characters: A-Z, a-z, 0-9, +, and / (plus = for padding). Every 3 bytes of binary data become 4 characters of Base64 text.</p>
+    <p style="margin-top:0.75rem">The key insight: Base64 doesn't encrypt or compress data — it <em>encodes</em> it for safe transport through systems that only handle text (email, JSON, URLs, HTML attributes).</p>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>How It Works (Simplified)</h2>
+    <p>Base64 takes 3 bytes (24 bits) of input and splits them into four 6-bit groups. Each 6-bit value (0-63) maps to a character in the Base64 alphabet. If the input isn't a multiple of 3 bytes, padding characters (=) are added:</p>
+    <pre style="background:var(--bg-tertiary);border:1px solid var(--border);border-radius:var(--radius);padding:0.75rem 1rem;font-family:var(--font-mono);font-size:0.8125rem;margin:0.5rem 0;overflow-x:auto">Input:  "Man"  →  ASCII 77, 97, 110
+Binary: 01001101 01100001 01101110
+Groups: 010011 010110 000101 101110
+Base64:  T      W      F      u
+Output: "TWFu"</pre>
+    <p style="margin-top:0.75rem"><strong>Size overhead:</strong> Base64 output is approximately 33% larger than the original binary data (3 bytes → 4 characters). This is the trade-off for text-safe transport.</p>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>When to Use Base64</h2>
+    <table class="cheat-table">
+      <tr><th>Use Case</th><th>Why Base64 Helps</th></tr>
+      <tr><td>Data URLs</td><td>Embed small images, fonts, or files directly in CSS/HTML as <code>data:image/png;base64,...</code></td></tr>
+      <tr><td>JSON API payloads</td><td>Safely include binary data (images, files) inside JSON strings without breaking syntax</td></tr>
+      <tr><td>Email attachments (MIME)</td><td>SMTP only handles 7-bit ASCII. Base64 encodes binary files for email transport.</td></tr>
+      <tr><td>JWT tokens</td><td>JWT header and payload are Base64URL-encoded (with - and _ replacing + and /)</td></tr>
+      <tr><td>Basic Auth headers</td><td>HTTP Authorization: Basic <code>base64(username:password)</code></td></tr>
+      <tr><td>Storing binary in text-based databases</td><td>When you must store binary data in a text column</td></tr>
+    </table>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>When NOT to Use Base64</h2>
+    <ul>
+      <li><strong>For large files</strong> — The 33% overhead adds up. A 1MB image becomes 1.33MB. Use binary transfer (multipart/form-data) for file uploads instead.</li>
+      <li><strong>For encryption</strong> — Base64 is encoding, not encryption. Anyone can decode it. Use AES, RSA, or TLS for security.</li>
+      <li><strong>For compression</strong> — Base64 makes data larger, not smaller. Compress first (gzip/brotli), then encode if needed.</li>
+      <li><strong>For storing passwords</strong> — Never Base64-encode passwords. Use bcrypt, scrypt, or argon2 for password hashing.</li>
+    </ul>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>Standard vs URL-Safe Base64</h2>
+    <table class="cheat-table">
+      <tr><th>Variant</th><th>Character 62</th><th>Character 63</th><th>Padding</th><th>Use Case</th></tr>
+      <tr><td>Standard</td><td>+</td><td>/</td><td>=</td><td>Email, MIME, PEM certificates</td></tr>
+      <tr><td>URL-Safe</td><td>-</td><td>_</td><td>(removed)</td><td>JWT, URL parameters, filenames</td></tr>
+    </table>
+    <p style="margin-top:0.75rem">URL-safe Base64 replaces <code>+</code> and <code>/</code> because they have special meaning in URLs (<code>+</code> is a space, <code>/</code> is a path separator). The trailing <code>=</code> padding is typically stripped since it can cause issues in URL parameters.</p>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>Try It Yourself</h2>
+    <p>Want to see Base64 in action? Use our <a href="../tools/base64.html">Base64 Encoder/Decoder</a> — encode text, decode strings, toggle URL-safe mode, and swap between input and output with one click.</p>
+  </div>
+  <div class="ad-container" id="ad-b64-guide-bottom"></div>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+</body>
+</html>

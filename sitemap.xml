@@ -20,4 +20,7 @@
   <url><loc>https://nordicnode.github.io/devtoolkit/pages/contact.html</loc><lastmod>2026-06-26</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
   <url><loc>https://nordicnode.github.io/devtoolkit/pages/json-validation-guide.html</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
   <url><loc>https://nordicnode.github.io/devtoolkit/pages/jwt-guide.html</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://nordicnode.github.io/devtoolkit/pages/http-status-codes-guide.html</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://nordicnode.github.io/devtoolkit/pages/regex-beginners-guide.html</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://nordicnode.github.io/devtoolkit/pages/base64-guide.html</loc><lastmod>2026-06-26</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 </urlset>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HTTP Status Codes — Complete Reference Guide | DevToolKit</title>
+  <meta name="description" content="Complete reference guide to HTTP status codes. Every code explained with use cases, common causes, and how to fix errors. Includes 1xx through 5xx with real-world examples.">
+  <meta name="keywords" content="HTTP status codes, HTTP 200, HTTP 404, HTTP 500, HTTP error codes, REST API status codes, web server responses, HTTP response reference">
+  <link rel="canonical" href="https://nordicnode.github.io/devtoolkit/pages/http-status-codes-guide.html">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <meta property="og:title" content="HTTP Status Codes — Complete Reference | DevToolKit">
+  <meta property="og:description" content="Every HTTP status code explained with use cases, common causes, and how to fix errors.">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Article","name":"HTTP Status Codes Complete Reference","url":"https://nordicnode.github.io/devtoolkit/pages/http-status-codes-guide.html","description":"Complete reference guide to every HTTP status code with explanations, use cases, and troubleshooting tips."}
+  </script>
+</head>
+<body>
+<header class="site-header"><div class="header-inner"><a href="../index.html" class="logo"><span class="logo-icon">DT</span>DevToolKit</a><nav><a href="../index.html">Tools</a><a href="cheatsheets.html">Cheat Sheets</a><a href="about.html">About</a></nav></div></header>
+<main>
+  <div class="tool-header"><h1>HTTP Status Codes — Complete Reference Guide</h1><p>Every HTTP status code explained with use cases, common causes, and troubleshooting tips.</p></div>
+  <div class="ad-container" id="ad-http-guide-top"></div>
+  <div class="info-section">
+    <h2>What Are HTTP Status Codes?</h2>
+    <p>HTTP status codes are three-digit numbers returned by a server in response to a client's request. They indicate whether the request was successful, redirected, had a client error, or encountered a server problem. Understanding these codes is essential for debugging APIs, troubleshooting web applications, and building reliable services.</p>
+    <p style="margin-top:0.75rem">Status codes are grouped into five classes based on the first digit:</p>
+    <table class="cheat-table" style="margin-top:0.75rem">
+      <tr><th>Class</th><th>Range</th><th>Meaning</th></tr>
+      <tr><td>1xx</td><td>100-199</td><td>Informational — request received, continuing process</td></tr>
+      <tr><td>2xx</td><td>200-299</td><td>Success — request successfully received and processed</td></tr>
+      <tr><td>3xx</td><td>300-399</td><td>Redirection — further action needed to complete request</td></tr>
+      <tr><td>4xx</td><td>400-499</td><td>Client Error — request contains bad syntax or cannot be fulfilled</td></tr>
+      <tr><td>5xx</td><td>500-599</td><td>Server Error — server failed to fulfill a valid request</td></tr>
+    </table>
+  </div>
+  <div class="info-section" style="margin-top:1.5rem"><h2>1xx — Informational</h2>
+    <table class="cheat-table"><tr><th>Code</th><th>Name</th><th>When You See It</th></tr><tr><td>100</td><td>Continue</td><td>Server received request headers and client should send the body. Used for large uploads where the client checks if the server will accept before sending.</td></tr><tr><td>101</td><td>Switching Protocols</td><td>Client requested a protocol upgrade (e.g., HTTP to WebSocket) and the server agreed.</td></tr><tr><td>103</td><td>Early Hints</td><td>Server sends headers before final response. Used for preloading resources while the server prepares the full response.</td></tr></table></div>
+  <div class="info-section" style="margin-top:1.5rem"><h2>2xx — Success</h2>
+    <table class="cheat-table"><tr><th>Code</th><th>Name</th><th>When You See It</th></tr><tr><td>200</td><td>OK</td><td>The standard success response. GET returns the resource, PUT updates it, DELETE confirms removal. The most common status code on the web.</td></tr><tr><td>201</td><td>Created</td><td>POST request successfully created a new resource. Response should include a Location header pointing to the new resource.</td></tr><tr><td>202</td><td>Accepted</td><td>Request accepted for processing but not yet complete. Used for async operations like batch jobs or long-running tasks.</td></tr><tr><td>204</td><td>No Content</td><td>Successful request with no response body. Common for DELETE operations and PUT updates where nothing needs to be returned.</td></tr><tr><td>206</td><td>Partial Content</td><td>Server returned part of the resource. Used with Range headers for resumable downloads and video streaming.</td></tr></table></div>
+  <div class="info-section" style="margin-top:1.5rem"><h2>3xx — Redirection</h2>
+    <table class="cheat-table"><tr><th>Code</th><th>Name</th><th>When You See It</th></tr><tr><td>301</td><td>Moved Permanently</td><td>Resource permanently moved to a new URL. Browsers cache this. Use for domain changes or URL restructures. SEO: link equity transfers to new URL.</td></tr><tr><td>302</td><td>Found</td><td>Temporary redirect. Browsers don't cache. Use for A/B testing, temporary maintenance pages. SEO: link equity stays on original URL.</td></tr><tr><td>304</td><td>Not Modified</td><td>Resource hasn't changed since last request (conditional GET with If-None-Match / If-Modified-Since). Saves bandwidth — server sends no body.</td></tr><tr><td>307</td><td>Temporary Redirect</td><td>Like 302 but guarantees the HTTP method doesn't change (POST stays POST). Preferred over 302 for technical correctness.</td></tr><tr><td>308</td><td>Permanent Redirect</td><td>Like 301 but guarantees the HTTP method doesn't change. Preferred for permanent redirects in modern APIs.</td></tr></table></div>
+  <div class="info-section" style="margin-top:1.5rem"><h2>4xx — Client Errors</h2>
+    <table class="cheat-table"><tr><th>Code</th><th>Name</th><th>When You See It</th><th>How to Fix</th></tr><tr><td>400</td><td>Bad Request</td><td>Malformed syntax, invalid JSON, missing required fields</td><td>Check request body format, validate JSON, ensure all required fields present</td></tr><tr><td>401</td><td>Unauthorized</td><td>Missing or invalid authentication credentials</td><td>Check your auth token, API key, or session. Re-authenticate if token expired.</td></tr><tr><td>403</td><td>Forbidden</td><td>Valid auth but insufficient permissions</td><td>Check user roles/permissions. You're authenticated but not authorized for this resource.</td></tr><tr><td>404</td><td>Not Found</td><td>Resource doesn't exist or URL is wrong</td><td>Verify the URL. Check if the resource was deleted or moved.</td></tr><tr><td>405</td><td>Method Not Allowed</td><td>Using wrong HTTP method (e.g., POST on a GET-only endpoint)</td><td>Check API docs for allowed methods on this endpoint.</td></tr><tr><td>408</td><td>Request Timeout</td><td>Server didn't receive complete request in time</td><td>Retry the request. Check network connectivity.</td></tr><tr><td>409</td><td>Conflict</td><td>Request conflicts with current state (duplicate, version mismatch)</td><td>Check for duplicates. Use If-Match for optimistic concurrency.</td></tr><tr><td>422</td><td>Unprocessable Entity</td><td>Valid syntax but semantic errors (validation failures)</td><td>Check field values against business rules. Read error details in response body.</td></tr><tr><td>429</td><td>Too Many Requests</td><td>Rate limit exceeded</td><td>Wait for Retry-After header time. Implement exponential backoff.</td></tr></table></div>
+  <div class="info-section" style="margin-top:1.5rem"><h2>5xx — Server Errors</h2>
+    <table class="cheat-table"><tr><th>Code</th><th>Name</th><th>When You See It</th><th>How to Fix</th></tr><tr><td>500</td><td>Internal Server Error</td><td>Uncaught exception, configuration error, database connection failure</td><td>Check server logs. The most generic error — could be anything on the server side.</td></tr><tr><td>502</td><td>Bad Gateway</td><td>Reverse proxy (nginx, Cloudflare) received an invalid response from upstream server</td><td>Upstream server is crashing or returning garbage. Check app server health.</td></tr><tr><td>503</td><td>Service Unavailable</td><td>Server overloaded, maintenance mode, dependency unavailable</td><td>Temporary — retry with backoff. Check if autoscaling is configured.</td></tr><tr><td>504</td><td>Gateway Timeout</td><td>Upstream server didn't respond in time</td><td>Increase proxy timeout or fix slow upstream. Database query taking too long is common.</td></tr></table></div>
+  <div class="info-section" style="margin-top:1.5rem">
+    <h2>Quick HTTP Status Code Lookup</h2>
+    <p>Need to decode a status code fast? Check our <a href="../pages/cheatsheets.html">HTTP cheat sheet</a> for a compact reference table, or use our <a href="../tools/timestamp.html">Timestamp Converter</a> to check cache-related headers.</p>
+  </div>
+  <div class="ad-container" id="ad-http-guide-bottom"></div>
+</main>
+<footer class="site-footer"><div class="footer-inner"><div class="footer-links"><a href="about.html">About</a><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a></div><p class="footer-copy">&copy; 2026 DevToolKit.</p></div></footer>
+</body>
+</html>
